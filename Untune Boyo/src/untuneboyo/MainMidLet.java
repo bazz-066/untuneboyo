@@ -7,15 +7,19 @@ package untuneboyo;
 
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
+import org.netbeans.microedition.lcdui.SplashScreen;
 
 /**
  * @author baskoro
  */
-public class MainMidLet extends MIDlet {
+public class MainMidLet extends MIDlet implements CommandListener {
 
     private boolean midletPaused = false;
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
+    private Map mainMap;
+    private SplashScreen splashScreen;
+    private Command exitCommand;
     //</editor-fold>//GEN-END:|fields|0|
 
     /**
@@ -45,7 +49,7 @@ public class MainMidLet extends MIDlet {
      */
     public void startMIDlet() {//GEN-END:|3-startMIDlet|0|3-preAction
         // write pre-action user code here
-//GEN-LINE:|3-startMIDlet|1|3-postAction
+        switchDisplayable(null, getSplashScreen());//GEN-LINE:|3-startMIDlet|1|3-postAction
         // write post-action user code here
     }//GEN-BEGIN:|3-startMIDlet|2|
     //</editor-fold>//GEN-END:|3-startMIDlet|2|
@@ -78,6 +82,81 @@ public class MainMidLet extends MIDlet {
         // write post-switch user code here
     }//GEN-BEGIN:|5-switchDisplayable|2|
     //</editor-fold>//GEN-END:|5-switchDisplayable|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Method: commandAction for Displayables ">//GEN-BEGIN:|7-commandAction|0|7-preCommandAction
+    /**
+     * Called by a system to indicated that a command has been invoked on a particular displayable.
+     * @param command the Command that was invoked
+     * @param displayable the Displayable where the command was invoked
+     */
+    public void commandAction(Command command, Displayable displayable) {//GEN-END:|7-commandAction|0|7-preCommandAction
+        // write pre-action user code here
+        if (displayable == mainMap) {//GEN-BEGIN:|7-commandAction|1|20-preAction
+            if (command == exitCommand) {//GEN-END:|7-commandAction|1|20-preAction
+                // write pre-action user code here
+                exitMIDlet();//GEN-LINE:|7-commandAction|2|20-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|3|16-preAction
+        } else if (displayable == splashScreen) {
+            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|3|16-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|4|16-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|5|7-postCommandAction
+        }//GEN-END:|7-commandAction|5|7-postCommandAction
+        // write post-action user code here
+    }//GEN-BEGIN:|7-commandAction|6|
+    //</editor-fold>//GEN-END:|7-commandAction|6|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: mainMap ">//GEN-BEGIN:|13-getter|0|13-preInit
+    /**
+     * Returns an initiliazed instance of mainMap component.
+     * @return the initialized component instance
+     */
+    public Map getMainMap() {
+        if (mainMap == null) {//GEN-END:|13-getter|0|13-preInit
+            // write pre-init user code here
+            mainMap = new Map();//GEN-BEGIN:|13-getter|1|13-postInit
+            mainMap.setTitle("Peta Surabaya");
+            mainMap.addCommand(getExitCommand());
+            mainMap.setCommandListener(this);//GEN-END:|13-getter|1|13-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|13-getter|2|
+        return mainMap;
+    }
+    //</editor-fold>//GEN-END:|13-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: splashScreen ">//GEN-BEGIN:|14-getter|0|14-preInit
+    /**
+     * Returns an initiliazed instance of splashScreen component.
+     * @return the initialized component instance
+     */
+    public SplashScreen getSplashScreen() {
+        if (splashScreen == null) {//GEN-END:|14-getter|0|14-preInit
+            // write pre-init user code here
+            splashScreen = new SplashScreen(getDisplay());//GEN-BEGIN:|14-getter|1|14-postInit
+            splashScreen.setTitle("splashScreen");
+            splashScreen.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|14-getter|2|
+        return splashScreen;
+    }
+    //</editor-fold>//GEN-END:|14-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|19-getter|0|19-preInit
+    /**
+     * Returns an initiliazed instance of exitCommand component.
+     * @return the initialized component instance
+     */
+    public Command getExitCommand() {
+        if (exitCommand == null) {//GEN-END:|19-getter|0|19-preInit
+            // write pre-init user code here
+            exitCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|19-getter|1|19-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|19-getter|2|
+        return exitCommand;
+    }
+    //</editor-fold>//GEN-END:|19-getter|2|
 
     /**
      * Returns a display instance.
