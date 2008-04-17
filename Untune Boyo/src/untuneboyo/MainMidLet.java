@@ -8,6 +8,7 @@ package untuneboyo;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import org.netbeans.microedition.lcdui.SplashScreen;
+import untuneboyo.connection.*;
 
 /**
  * @author baskoro
@@ -15,7 +16,8 @@ import org.netbeans.microedition.lcdui.SplashScreen;
 public class MainMidLet extends MIDlet implements CommandListener {
 
     private boolean midletPaused = false;
-
+    private NetworkInfoConnector noc;
+    
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private Map mainMap;
     private SplashScreen splashScreen;
@@ -29,6 +31,8 @@ public class MainMidLet extends MIDlet implements CommandListener {
      * The MainMidLet constructor.
      */
     public MainMidLet() {
+        noc = new NetworkInfoConnector(this.getStringItem());
+        this.noc.start();
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -179,6 +183,7 @@ public class MainMidLet extends MIDlet implements CommandListener {
             form.addCommand(getOkCommand());
             form.setCommandListener(this);//GEN-END:|22-getter|1|22-postInit
             // write post-init user code here
+            
         }//GEN-BEGIN:|22-getter|2|
         return form;
     }
@@ -208,7 +213,7 @@ public class MainMidLet extends MIDlet implements CommandListener {
         if (stringItem == null) {//GEN-END:|26-getter|0|26-preInit
             // write pre-init user code here
             stringItem = new StringItem("stringItem", null, Item.PLAIN);//GEN-LINE:|26-getter|1|26-postInit
-            // write post-init user code here
+            // write post-init user code here  
         }//GEN-BEGIN:|26-getter|2|
         return stringItem;
     }
