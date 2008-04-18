@@ -182,8 +182,7 @@ public class MainMidLet extends MIDlet implements CommandListener {
             form = new Form("form", new Item[] { getStringItem() });//GEN-BEGIN:|22-getter|1|22-postInit
             form.addCommand(getOkCommand());
             form.setCommandListener(this);//GEN-END:|22-getter|1|22-postInit
-            // write post-init user code here
-            
+            // write post-init user code here 
         }//GEN-BEGIN:|22-getter|2|
         return form;
     }

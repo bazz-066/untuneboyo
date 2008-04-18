@@ -5,10 +5,13 @@
 
 package untuneboyo.connection;
 
-import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.SocketConnection;
+import javax.microedition.lcdui.Alert;
+import javax.microedition.lcdui.AlertType;
+import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.StringItem;
 
 /**
@@ -18,7 +21,7 @@ import javax.microedition.lcdui.StringItem;
 public class NetworkInfoConnector extends Thread
 {
     private SocketConnection scSocket;
-    private DataInputStream dis;
+    private InputStream iStream;
     private String rawInfo;
     private boolean isDone;
     private StringItem strItem;
@@ -32,19 +35,7 @@ public class NetworkInfoConnector extends Thread
     
     public String GetNetworkInfo()
     {
-        try 
-        {
-            this.scSocket = (SocketConnection) Connector.open("socket://localhost:6666");
-            this.dis = this.scSocket.openDataInputStream();
-            this.rawInfo = this.dis.readUTF();
-            
-            this.dis.close();
-            this.scSocket.close();
-        } 
-        catch (IOException ex) 
-        {
-            ex.printStackTrace();
-        }
+        
         
         //if(this.isDone)
         {
@@ -60,18 +51,27 @@ public class NetworkInfoConnector extends Thread
     {
         try 
         {
-            this.scSocket = (SocketConnection) Connector.open("socket://localhost:6666");
-            this.dis = this.scSocket.openDataInputStream();
-            this.rawInfo = this.dis.readUTF();
+            StringBuffer sb = new StringBuffer();
+            int c = 0;
             
-            this.dis.close();
+            this.scSocket = (SocketConnection) Connector.open("socket://localhost:6666");
+            this.iStream = this.scSocket.openInputStream();
+            while((c = this.iStream.read()) != -1)
+            {
+                sb.append((char)c);
+            }
+            
+            this.rawInfo = sb.toString();
+            
+            this.iStream.close();
             this.scSocket.close();
         } 
         catch (IOException ex) 
         {
-            ex.printStackTrace();
+            this.rawInfo = ex.getMessage();
         }
         
+        this.strItem = new StringItem("str", null, Item.PLAIN);
         this.strItem.setText(this.rawInfo);
         this.isDone = true;
     }
