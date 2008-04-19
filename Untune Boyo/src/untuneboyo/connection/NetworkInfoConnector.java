@@ -13,6 +13,7 @@ import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.StringItem;
+import untuneboyo.MainMidLet;
 
 /**
  *
@@ -24,27 +25,46 @@ public class NetworkInfoConnector extends Thread
     private InputStream iStream;
     private String rawInfo;
     private boolean isDone;
-    private StringItem strItem;
+    private MainMidLet midlet;
     
-    public NetworkInfoConnector(StringItem strItem)
+    public NetworkInfoConnector(MainMidLet midlet)
     {
         this.rawInfo = "";
         this.isDone = false;
-        this.strItem = strItem;
+        this.midlet = midlet;
     }
     
     public String GetNetworkInfo()
     {
-        
-        
-        //if(this.isDone)
+        try 
         {
-            return this.rawInfo;
+            StringBuffer sb = new StringBuffer();
+            int c = 0;
+            
+            this.scSocket = (SocketConnection) Connector.open("socket://127.0.0.1:6666");
+            this.iStream = this.scSocket.openInputStream();
+            c = this.iStream.read();
+            while(c != -1)
+            {
+                sb.append((char)c);
+                c = this.iStream.read();
+            }
+            
+            this.rawInfo = Integer.toString(sb.length());
+            
+            this.iStream.close();
+            this.scSocket.close();
+        } 
+        catch (IOException ex) 
+        {
+            this.rawInfo = "exception : " + ex.getMessage();
         }
-        //else
-        /*{
-            return "blum slese";
-        }*/
+        
+        /*Alert alert = this.midlet.getAlert();
+        alert.setString("hasil : " + this.rawInfo);
+        this.midlet.getDisplay().setCurrent(alert, alert);*/
+        
+        return this.rawInfo;
     }
 
     public void run() 
@@ -54,7 +74,7 @@ public class NetworkInfoConnector extends Thread
             StringBuffer sb = new StringBuffer();
             int c = 0;
             
-            this.scSocket = (SocketConnection) Connector.open("socket://localhost:6666");
+            this.scSocket = (SocketConnection) Connector.open("socket://127.0.0.1:6666");
             this.iStream = this.scSocket.openInputStream();
             while((c = this.iStream.read()) != -1)
             {
@@ -71,8 +91,8 @@ public class NetworkInfoConnector extends Thread
             this.rawInfo = ex.getMessage();
         }
         
-        this.strItem = new StringItem("str", null, Item.PLAIN);
-        this.strItem.setText(this.rawInfo);
+        //this.strItem = new StringItem("str", null, Item.PLAIN);
+        //this.strItem.setText(this.rawInfo);
         this.isDone = true;
     }
 }

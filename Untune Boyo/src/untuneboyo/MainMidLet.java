@@ -31,8 +31,8 @@ public class MainMidLet extends MIDlet implements CommandListener {
      * The MainMidLet constructor.
      */
     public MainMidLet() {
-        noc = new NetworkInfoConnector(this.getStringItem());
-        this.noc.start();
+        this.noc = new NetworkInfoConnector(this);
+        //this.noc.start();
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -118,8 +118,9 @@ public class MainMidLet extends MIDlet implements CommandListener {
             }//GEN-BEGIN:|7-commandAction|7|7-postCommandAction
         }//GEN-END:|7-commandAction|7|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|8|
-    //</editor-fold>//GEN-END:|7-commandAction|8|
+    }//GEN-BEGIN:|7-commandAction|8|16-postAction
+    //</editor-fold>//GEN-END:|7-commandAction|8|16-postAction
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: mainMap ">//GEN-BEGIN:|13-getter|0|13-preInit
     /**
@@ -212,11 +213,16 @@ public class MainMidLet extends MIDlet implements CommandListener {
         if (stringItem == null) {//GEN-END:|26-getter|0|26-preInit
             // write pre-init user code here
             stringItem = new StringItem("stringItem", null, Item.PLAIN);//GEN-LINE:|26-getter|1|26-postInit
-            // write post-init user code here  
+            // write post-init user code here
+            this.stringItem.setText(this.noc.GetNetworkInfo());
         }//GEN-BEGIN:|26-getter|2|
         return stringItem;
     }
     //</editor-fold>//GEN-END:|26-getter|2|
+
+
+
+
 
     /**
      * Returns a display instance.
