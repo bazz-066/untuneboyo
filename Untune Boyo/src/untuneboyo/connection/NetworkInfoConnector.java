@@ -43,14 +43,14 @@ public class NetworkInfoConnector extends Thread
             
             this.scSocket = (SocketConnection) Connector.open("socket://127.0.0.1:6666");
             this.iStream = this.scSocket.openInputStream();
-            c = this.iStream.read();
-            while(c != -1)
+            
+            while((c = this.iStream.read()) != -1)
             {
                 sb.append((char)c);
-                c = this.iStream.read();
+                sb.append(" ");
             }
             
-            this.rawInfo = Integer.toString(sb.length());
+            this.rawInfo = sb.toString();
             
             this.iStream.close();
             this.scSocket.close();
