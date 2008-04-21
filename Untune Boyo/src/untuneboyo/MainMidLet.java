@@ -21,8 +21,8 @@ public class MainMidLet extends MIDlet implements CommandListener {
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private SplashScreen splashScreen;
     private Form form;
-    private StringItem stringItem;
     private TextField textField;
+    private StringItem stringItem;
     private Command exitCommand;
     private Command okCommand;
     //</editor-fold>//GEN-END:|fields|0|
@@ -189,7 +189,8 @@ public class MainMidLet extends MIDlet implements CommandListener {
             // write pre-init user code here
             stringItem = new StringItem("stringItem", null, Item.PLAIN);//GEN-LINE:|26-getter|1|26-postInit
             // write post-init user code here
-            stringItem.setLabel(this.noc.GetNetworkInfo());
+            String str = this.noc.GetNetworkInfo();
+            stringItem.setText(str);
         }//GEN-BEGIN:|26-getter|2|
         return stringItem;
     }
@@ -205,7 +206,6 @@ public class MainMidLet extends MIDlet implements CommandListener {
             // write pre-init user code here
             textField = new TextField("textField", null, 32, TextField.ANY);//GEN-LINE:|27-getter|1|27-postInit
             // write post-init user code here
-            textField.setString(this.noc.GetNetworkInfo());
         }//GEN-BEGIN:|27-getter|2|
         return textField;
     }

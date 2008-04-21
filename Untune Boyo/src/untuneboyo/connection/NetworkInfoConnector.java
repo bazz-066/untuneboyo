@@ -9,10 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.SocketConnection;
-import javax.microedition.lcdui.Alert;
-import javax.microedition.lcdui.AlertType;
-import javax.microedition.lcdui.Item;
-import javax.microedition.lcdui.StringItem;
 import untuneboyo.MainMidLet;
 
 /**
@@ -36,6 +32,7 @@ public class NetworkInfoConnector extends Thread
     
     public String GetNetworkInfo()
     {
+        String coba;
         try 
         {
             StringBuffer sb = new StringBuffer();
@@ -44,32 +41,34 @@ public class NetworkInfoConnector extends Thread
             this.scSocket = (SocketConnection) Connector.open("socket://127.0.0.1:6666");
             this.iStream = this.scSocket.openInputStream();
             
-            while((c = this.iStream.read()) != -1)
+            //while((c = this.iStream.read()) != -1)
+            while(c < 66)
             {
-                sb.append((char)c);
-                sb.append(" ");
+                sb.append(c);
+                c++;
             }
             
-            this.rawInfo = sb.toString();
+            //this.rawInfo = "test coks";
+            coba = sb.toString();
             
             this.iStream.close();
             this.scSocket.close();
         } 
         catch (IOException ex) 
         {
-            this.rawInfo = "exception : " + ex.getMessage();
+            coba = "exception : " + ex.getMessage();
         }
         
         /*Alert alert = this.midlet.getAlert();
         alert.setString("hasil : " + this.rawInfo);
         this.midlet.getDisplay().setCurrent(alert, alert);*/
         
-        return this.rawInfo;
+        return coba;
     }
-
+       
     public void run() 
     {
-        try 
+        /*try 
         {
             StringBuffer sb = new StringBuffer();
             int c = 0;
@@ -81,7 +80,7 @@ public class NetworkInfoConnector extends Thread
                 sb.append((char)c);
             }
             
-            this.rawInfo = sb.toString();
+            this.rawInfo = "test cok";
             
             this.iStream.close();
             this.scSocket.close();
@@ -93,6 +92,6 @@ public class NetworkInfoConnector extends Thread
         
         //this.strItem = new StringItem("str", null, Item.PLAIN);
         //this.strItem.setText(this.rawInfo);
-        this.isDone = true;
+        this.isDone = true;*/
     }
 }
