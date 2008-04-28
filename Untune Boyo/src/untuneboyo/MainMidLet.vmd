@@ -8,10 +8,10 @@
                     <Property name="start" typeID="C#MobileDeviceStartEventSource" value="R3"/>
                     <Property name="resume" typeID="C#MobileDeviceResumeEventSource" value="R4"/>
                     <Component componentID="3" typeID="C#MobileDeviceStartEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R17"/>
-                        <Component componentID="17" typeID="C#SwitchDisplayableEventHandler">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R28"/>
+                        <Component componentID="28" typeID="C#SwitchDisplayableEventHandler">
                             <Property name="eventSource" typeID="C#EventSource" value="R3"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R29"/>
                         </Component>
                     </Component>
                     <Component componentID="4" typeID="C#MobileDeviceResumeEventSource"/>
@@ -24,21 +24,6 @@
                 <Component componentID="9" typeID="C#ItemStateListener"/>
             </Component>
             <Component componentID="10" typeID="C#DisplayablesCategory">
-                <Component componentID="14" typeID="Corg.netbeans.microedition.lcdui.SplashScreen">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VsplashScreen"/>
-                    <Property name="commands" typeID="1C#CommandEventSource" value="A1:3_R16"/>
-                    <Property name="title" typeID="Pjava.lang.String" value="VsplashScreen"/>
-                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
-                    <Component componentID="16" typeID="C#SplashScreenDismissCommandEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R18"/>
-                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
-                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R15"/>
-                        <Component componentID="18" typeID="C#SwitchDisplayableEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R16"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R22"/>
-                        </Component>
-                    </Component>
-                </Component>
                 <Component componentID="22" typeID="Cjavax.microedition.lcdui.Form">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vform"/>
                     <Property name="commands" typeID="1C#CommandEventSource" value="A1:3_R24"/>
@@ -68,6 +53,21 @@
                         <Property name="appearanceMode" typeID="Pint" value="V0"/>
                     </Component>
                 </Component>
+                <Component componentID="29" typeID="Corg.netbeans.microedition.lcdui.SplashScreen">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VsplashScreen"/>
+                    <Property name="commands" typeID="1C#CommandEventSource" value="A1:3_R30"/>
+                    <Property name="title" typeID="Pjava.lang.String" value="VsplashScreen"/>
+                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
+                    <Component componentID="30" typeID="C#SplashScreenDismissCommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R31"/>
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R29"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R15"/>
+                        <Component componentID="31" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R30"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R22"/>
+                        </Component>
+                    </Component>
+                </Component>
             </Component>
             <Component componentID="11" typeID="C#CommandsCategory">
                 <Component componentID="15" typeID="C#SplashScreenDismissCommand">
@@ -91,8 +91,8 @@
         </Component>
     </Document>
     <FlowScene version="1">
-        <Node componentID="14" descriptorID="componentNode14" x="312" y="77"/>
-        <Node componentID="22" descriptorID="componentNode22" x="208" y="262"/>
         <Node componentID="2" descriptorID="componentNode2" x="50" y="50"/>
+        <Node componentID="22" descriptorID="componentNode22" x="410" y="291"/>
+        <Node componentID="29" descriptorID="componentNode29" x="359" y="105"/>
     </FlowScene>
 </VisualDesign>

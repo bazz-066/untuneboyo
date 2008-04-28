@@ -15,13 +15,15 @@ import untuneboyo.MainMidLet;
  *
  * @author baskoro
  */
-public class NetworkInfoConnector extends Thread
+public class NetworkInfoConnector
 {
     private SocketConnection scSocket;
     private InputStream iStream;
     private String rawInfo;
     private boolean isDone;
     private MainMidLet midlet;
+    
+    private static final int BUFSIZE = 2048;
     
     public NetworkInfoConnector(MainMidLet midlet)
     {
@@ -33,22 +35,32 @@ public class NetworkInfoConnector extends Thread
     public String GetNetworkInfo()
     {
         String coba;
+        int index = 0;
+        byte[] buf = new byte[NetworkInfoConnector.BUFSIZE];
+        
         try 
         {
             StringBuffer sb = new StringBuffer();
-            int c = 0;
             
             this.scSocket = (SocketConnection) Connector.open("socket://127.0.0.1:6666");
             this.iStream = this.scSocket.openInputStream();
+            int read;
             
-            //while((c = this.iStream.read()) != -1)
-            while(c < 66)
+            while(true)
             {
-                sb.append(c);
-                c++;
+                read = this.iStream.read(buf, index, BUFSIZE - index);
+                                
+                if(read == -1)
+                {
+                    break;
+                }
+                else
+                {
+                    index += read;
+                    sb.append(new String(buf, 0, index));
+                }
             }
             
-            //this.rawInfo = "test coks";
             coba = sb.toString();
             
             this.iStream.close();
@@ -59,39 +71,6 @@ public class NetworkInfoConnector extends Thread
             coba = "exception : " + ex.getMessage();
         }
         
-        /*Alert alert = this.midlet.getAlert();
-        alert.setString("hasil : " + this.rawInfo);
-        this.midlet.getDisplay().setCurrent(alert, alert);*/
-        
         return coba;
-    }
-       
-    public void run() 
-    {
-        /*try 
-        {
-            StringBuffer sb = new StringBuffer();
-            int c = 0;
-            
-            this.scSocket = (SocketConnection) Connector.open("socket://127.0.0.1:6666");
-            this.iStream = this.scSocket.openInputStream();
-            while((c = this.iStream.read()) != -1)
-            {
-                sb.append((char)c);
-            }
-            
-            this.rawInfo = "test cok";
-            
-            this.iStream.close();
-            this.scSocket.close();
-        } 
-        catch (IOException ex) 
-        {
-            this.rawInfo = ex.getMessage();
-        }
-        
-        //this.strItem = new StringItem("str", null, Item.PLAIN);
-        //this.strItem.setText(this.rawInfo);
-        this.isDone = true;*/
     }
 }

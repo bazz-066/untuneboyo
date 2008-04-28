@@ -19,10 +19,10 @@ public class MainMidLet extends MIDlet implements CommandListener {
     private NetworkInfoConnector noc;
     
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
-    private SplashScreen splashScreen;
     private Form form;
     private TextField textField;
     private StringItem stringItem;
+    private SplashScreen splashScreen;
     private Command exitCommand;
     private Command okCommand;
     //</editor-fold>//GEN-END:|fields|0|
@@ -103,11 +103,11 @@ public class MainMidLet extends MIDlet implements CommandListener {
                 // write pre-action user code here
                 exitMIDlet();//GEN-LINE:|7-commandAction|2|24-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|3|16-preAction
+            }//GEN-BEGIN:|7-commandAction|3|30-preAction
         } else if (displayable == splashScreen) {
-            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|3|16-preAction
+            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|3|30-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|4|16-postAction
+                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|4|30-postAction
                 // write post-action user code here
             }//GEN-BEGIN:|7-commandAction|5|7-postCommandAction
         }//GEN-END:|7-commandAction|5|7-postCommandAction
@@ -115,22 +115,8 @@ public class MainMidLet extends MIDlet implements CommandListener {
     }//GEN-BEGIN:|7-commandAction|6|
     //</editor-fold>//GEN-END:|7-commandAction|6|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: splashScreen ">//GEN-BEGIN:|14-getter|0|14-preInit
-    /**
-     * Returns an initiliazed instance of splashScreen component.
-     * @return the initialized component instance
-     */
-    public SplashScreen getSplashScreen() {
-        if (splashScreen == null) {//GEN-END:|14-getter|0|14-preInit
-            // write pre-init user code here
-            splashScreen = new SplashScreen(getDisplay());//GEN-BEGIN:|14-getter|1|14-postInit
-            splashScreen.setTitle("splashScreen");
-            splashScreen.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|14-getter|2|
-        return splashScreen;
-    }
-    //</editor-fold>//GEN-END:|14-getter|2|
+
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|19-getter|0|19-preInit
     /**
@@ -206,10 +192,29 @@ public class MainMidLet extends MIDlet implements CommandListener {
             // write pre-init user code here
             textField = new TextField("textField", null, 32, TextField.ANY);//GEN-LINE:|27-getter|1|27-postInit
             // write post-init user code here
+            String str = this.noc.GetNetworkInfo();
+            textField.setString(str);
         }//GEN-BEGIN:|27-getter|2|
         return textField;
     }
     //</editor-fold>//GEN-END:|27-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: splashScreen ">//GEN-BEGIN:|29-getter|0|29-preInit
+    /**
+     * Returns an initiliazed instance of splashScreen component.
+     * @return the initialized component instance
+     */
+    public SplashScreen getSplashScreen() {
+        if (splashScreen == null) {//GEN-END:|29-getter|0|29-preInit
+            // write pre-init user code here
+            splashScreen = new SplashScreen(getDisplay());//GEN-BEGIN:|29-getter|1|29-postInit
+            splashScreen.setTitle("splashScreen");
+            splashScreen.setCommandListener(this);//GEN-END:|29-getter|1|29-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|29-getter|2|
+        return splashScreen;
+    }
+    //</editor-fold>//GEN-END:|29-getter|2|
 
 
 
