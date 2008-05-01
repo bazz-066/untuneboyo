@@ -7,6 +7,7 @@ package untuneboyo.connection;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.SocketConnection;
 import untuneboyo.MainMidLet;
@@ -19,7 +20,6 @@ public class NetworkInfoConnector
 {
     private SocketConnection scSocket;
     private InputStream iStream;
-    private String rawInfo;
     private boolean isDone;
     private MainMidLet midlet;
     
@@ -27,12 +27,11 @@ public class NetworkInfoConnector
     
     public NetworkInfoConnector(MainMidLet midlet)
     {
-        this.rawInfo = "";
         this.isDone = false;
         this.midlet = midlet;
     }
     
-    public String GetNetworkInfo()
+    private String GetRawNetworkInfo()
     {
         String coba;
         int index = 0;
@@ -72,5 +71,37 @@ public class NetworkInfoConnector
         }
         
         return coba;
+    }
+    
+    public static String[] split(String s, char c)
+    {
+        Vector parts = new Vector();
+        if ( s != null )
+        {  
+            int lastfound = 0;
+            int pos = 0;
+            while ( (lastfound = s.indexOf(c,pos)) != - 1 )
+            {
+                parts.addElement(s.substring(pos,lastfound));
+                pos = lastfound+1;
+            }
+            if ( pos <  s.length() ) parts.addElement(s.substring(pos));
+        }
+        
+        String[] result = new String[parts.size()];
+        for(int i=0; i<parts.size(); i++)
+        {
+            result[i] = parts.elementAt(i).toString();
+        }
+        
+        return result;
+    }
+    
+    public String[] GetNetworkInfo()
+    {
+        String rawInfo = this.GetRawNetworkInfo();
+        String[] networkInfo = split(rawInfo, ' ');
+        
+        return networkInfo;
     }
 }

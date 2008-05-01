@@ -19,10 +19,9 @@ public class MainMidLet extends MIDlet implements CommandListener {
     private NetworkInfoConnector noc;
     
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
-    private Form form;
-    private TextField textField;
-    private StringItem stringItem;
     private SplashScreen splashScreen;
+    private Map map;
+    private Form form;
     private Command exitCommand;
     private Command okCommand;
     //</editor-fold>//GEN-END:|fields|0|
@@ -32,7 +31,6 @@ public class MainMidLet extends MIDlet implements CommandListener {
      */
     public MainMidLet() {
         this.noc = new NetworkInfoConnector(this);
-        //this.noc.start();
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -98,24 +96,16 @@ public class MainMidLet extends MIDlet implements CommandListener {
      */
     public void commandAction(Command command, Displayable displayable) {//GEN-END:|7-commandAction|0|7-preCommandAction
         // write pre-action user code here
-        if (displayable == form) {//GEN-BEGIN:|7-commandAction|1|24-preAction
-            if (command == okCommand) {//GEN-END:|7-commandAction|1|24-preAction
+        if (displayable == splashScreen) {//GEN-BEGIN:|7-commandAction|1|30-preAction
+            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|1|30-preAction
                 // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|2|24-postAction
+                switchDisplayable(null, getMap());//GEN-LINE:|7-commandAction|2|30-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|3|30-preAction
-        } else if (displayable == splashScreen) {
-            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|3|30-preAction
-                // write pre-action user code here
-                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|4|30-postAction
-                // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|5|7-postCommandAction
-        }//GEN-END:|7-commandAction|5|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|3|7-postCommandAction
+        }//GEN-END:|7-commandAction|3|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|6|
-    //</editor-fold>//GEN-END:|7-commandAction|6|
-
-
+    }//GEN-BEGIN:|7-commandAction|4|
+    //</editor-fold>//GEN-END:|7-commandAction|4|
 
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|19-getter|0|19-preInit
@@ -133,22 +123,7 @@ public class MainMidLet extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|19-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: form ">//GEN-BEGIN:|22-getter|0|22-preInit
-    /**
-     * Returns an initiliazed instance of form component.
-     * @return the initialized component instance
-     */
-    public Form getForm() {
-        if (form == null) {//GEN-END:|22-getter|0|22-preInit
-            // write pre-init user code here
-            form = new Form("form", new Item[] { getStringItem(), getTextField() });//GEN-BEGIN:|22-getter|1|22-postInit
-            form.addCommand(getOkCommand());
-            form.setCommandListener(this);//GEN-END:|22-getter|1|22-postInit
-            // write post-init user code here 
-        }//GEN-BEGIN:|22-getter|2|
-        return form;
-    }
-    //</editor-fold>//GEN-END:|22-getter|2|
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: okCommand ">//GEN-BEGIN:|23-getter|0|23-preInit
     /**
@@ -165,39 +140,9 @@ public class MainMidLet extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|23-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: stringItem ">//GEN-BEGIN:|26-getter|0|26-preInit
-    /**
-     * Returns an initiliazed instance of stringItem component.
-     * @return the initialized component instance
-     */
-    public StringItem getStringItem() {
-        if (stringItem == null) {//GEN-END:|26-getter|0|26-preInit
-            // write pre-init user code here
-            stringItem = new StringItem("stringItem", null, Item.PLAIN);//GEN-LINE:|26-getter|1|26-postInit
-            // write post-init user code here
-            String str = this.noc.GetNetworkInfo();
-            stringItem.setText(str);
-        }//GEN-BEGIN:|26-getter|2|
-        return stringItem;
-    }
-    //</editor-fold>//GEN-END:|26-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: textField ">//GEN-BEGIN:|27-getter|0|27-preInit
-    /**
-     * Returns an initiliazed instance of textField component.
-     * @return the initialized component instance
-     */
-    public TextField getTextField() {
-        if (textField == null) {//GEN-END:|27-getter|0|27-preInit
-            // write pre-init user code here
-            textField = new TextField("textField", null, 32, TextField.ANY);//GEN-LINE:|27-getter|1|27-postInit
-            // write post-init user code here
-            String str = this.noc.GetNetworkInfo();
-            textField.setString(str);
-        }//GEN-BEGIN:|27-getter|2|
-        return textField;
-    }
-    //</editor-fold>//GEN-END:|27-getter|2|
+
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: splashScreen ">//GEN-BEGIN:|29-getter|0|29-preInit
     /**
@@ -215,6 +160,37 @@ public class MainMidLet extends MIDlet implements CommandListener {
         return splashScreen;
     }
     //</editor-fold>//GEN-END:|29-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: map ">//GEN-BEGIN:|32-getter|0|32-preInit
+    /**
+     * Returns an initiliazed instance of map component.
+     * @return the initialized component instance
+     */
+    public Map getMap() {
+        if (map == null) {//GEN-END:|32-getter|0|32-preInit
+            // write pre-init user code here
+            map = new Map();//GEN-BEGIN:|32-getter|1|32-postInit
+            map.setTitle("map");//GEN-END:|32-getter|1|32-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|32-getter|2|
+        return map;
+    }
+    //</editor-fold>//GEN-END:|32-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: form ">//GEN-BEGIN:|34-getter|0|34-preInit
+    /**
+     * Returns an initiliazed instance of form component.
+     * @return the initialized component instance
+     */
+    public Form getForm() {
+        if (form == null) {//GEN-END:|34-getter|0|34-preInit
+            // write pre-init user code here
+            form = new Form("form");//GEN-LINE:|34-getter|1|34-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|34-getter|2|
+        return form;
+    }
+    //</editor-fold>//GEN-END:|34-getter|2|
 
 
 
