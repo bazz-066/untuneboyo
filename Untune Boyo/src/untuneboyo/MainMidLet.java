@@ -9,6 +9,7 @@ import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import org.netbeans.microedition.lcdui.SplashScreen;
 import untuneboyo.connection.*;
+import untuneboyo.pathplanning.AdjacencyMatriks;
 
 /**
  * @author baskoro
@@ -19,11 +20,13 @@ public class MainMidLet extends MIDlet implements CommandListener {
     private NetworkInfoConnector noc;
     
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
-    private SplashScreen splashScreen;
-    private Map map;
     private Form form;
+    private StringItem stringItem;
+    private Map map;
+    private SplashScreen splashScreen;
     private Command exitCommand;
     private Command okCommand;
+    private Command okCommand1;
     //</editor-fold>//GEN-END:|fields|0|
 
     /**
@@ -96,17 +99,22 @@ public class MainMidLet extends MIDlet implements CommandListener {
      */
     public void commandAction(Command command, Displayable displayable) {//GEN-END:|7-commandAction|0|7-preCommandAction
         // write pre-action user code here
-        if (displayable == splashScreen) {//GEN-BEGIN:|7-commandAction|1|30-preAction
-            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|1|30-preAction
+        if (displayable == form) {//GEN-BEGIN:|7-commandAction|1|36-preAction
+            if (command == okCommand1) {//GEN-END:|7-commandAction|1|36-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getMap());//GEN-LINE:|7-commandAction|2|30-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|2|36-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|3|7-postCommandAction
-        }//GEN-END:|7-commandAction|3|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|3|30-preAction
+        } else if (displayable == splashScreen) {
+            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|3|30-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|4|30-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|5|7-postCommandAction
+        }//GEN-END:|7-commandAction|5|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|4|
-    //</editor-fold>//GEN-END:|7-commandAction|4|
-
+    }//GEN-BEGIN:|7-commandAction|6|
+    //</editor-fold>//GEN-END:|7-commandAction|6|
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|19-getter|0|19-preInit
     /**
@@ -123,8 +131,6 @@ public class MainMidLet extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|19-getter|2|
 
-
-
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: okCommand ">//GEN-BEGIN:|23-getter|0|23-preInit
     /**
      * Returns an initiliazed instance of okCommand component.
@@ -139,10 +145,6 @@ public class MainMidLet extends MIDlet implements CommandListener {
         return okCommand;
     }
     //</editor-fold>//GEN-END:|23-getter|2|
-
-
-
-
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: splashScreen ">//GEN-BEGIN:|29-getter|0|29-preInit
     /**
@@ -185,12 +187,58 @@ public class MainMidLet extends MIDlet implements CommandListener {
     public Form getForm() {
         if (form == null) {//GEN-END:|34-getter|0|34-preInit
             // write pre-init user code here
-            form = new Form("form");//GEN-LINE:|34-getter|1|34-postInit
+            form = new Form("form", new Item[] { getStringItem() });//GEN-BEGIN:|34-getter|1|34-postInit
+            form.addCommand(getOkCommand1());
+            form.setCommandListener(this);//GEN-END:|34-getter|1|34-postInit
             // write post-init user code here
         }//GEN-BEGIN:|34-getter|2|
         return form;
     }
     //</editor-fold>//GEN-END:|34-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: stringItem ">//GEN-BEGIN:|38-getter|0|38-preInit
+    /**
+     * Returns an initiliazed instance of stringItem component.
+     * @return the initialized component instance
+     */
+    public StringItem getStringItem() {
+        if (stringItem == null) {//GEN-END:|38-getter|0|38-preInit
+            // write pre-init user code here
+            stringItem = new StringItem("stringItem", null);//GEN-LINE:|38-getter|1|38-postInit
+            // write post-init user code here
+            AdjacencyMatriks matriks = new AdjacencyMatriks(3);
+            matriks.LoadMatriksFromFile();
+            StringBuffer sb = new StringBuffer();
+            int[][] matrik = matriks.GetMatriks();
+            for(int i=0;i<3;i++)
+            {
+                for(int j=0;j<3;j++)
+                {
+                    sb.append(matrik[i][j]);
+                    sb.append(" ");
+                }
+                sb.append("\n");
+            }
+            stringItem.setText(sb.toString());
+        }//GEN-BEGIN:|38-getter|2|
+        return stringItem;
+    }
+    //</editor-fold>//GEN-END:|38-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: okCommand1 ">//GEN-BEGIN:|35-getter|0|35-preInit
+    /**
+     * Returns an initiliazed instance of okCommand1 component.
+     * @return the initialized component instance
+     */
+    public Command getOkCommand1() {
+        if (okCommand1 == null) {//GEN-END:|35-getter|0|35-preInit
+            // write pre-init user code here
+            okCommand1 = new Command("Ok", Command.OK, 0);//GEN-LINE:|35-getter|1|35-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|35-getter|2|
+        return okCommand1;
+    }
+    //</editor-fold>//GEN-END:|35-getter|2|
 
 
 

@@ -5,6 +5,10 @@
 
 package untuneboyo.pathplanning;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  *
  * @author baskoro
@@ -18,6 +22,60 @@ public class AdjacencyMatriks
     {
         this.size = size;
         this.adjMatriks = new int[size][size];
+    }
+    
+    public int[][] GetMatriks()
+    {
+        return this.adjMatriks;
+    }
+    
+    public int LoadMatriksFromFile()
+    {
+        InputStream ins = getClass().getResourceAsStream("/untuneboyo/resource/adjmatriks");
+        
+        if(ins != null)
+        {
+            try 
+            {
+                int c, row = 0, col = 0;
+                while ((c = ins.read()) != -1) 
+                {
+                    char huruf = (char)c;
+                    
+                    if(huruf == ' ')
+                    {
+                        continue;
+                    }
+                    else if(c == 13)
+                    {
+                        row++;
+                        col = 0;
+                        c = ins.read();
+                        
+                        if(c == -1)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        this.adjMatriks[row][col] = Integer.parseInt(new String(new char[] { huruf }));
+                        col++;
+                    }
+                }
+            } 
+            catch (IOException ex) 
+            {
+                ex.printStackTrace();
+                return -1;
+            }
+        }
+        else
+        {
+            return -1;
+        }
+        
+        return 0;
     }
     
     public int[][] GetPower2Matriks()
