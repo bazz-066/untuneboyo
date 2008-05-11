@@ -10,6 +10,9 @@ import javax.microedition.lcdui.*;
 import org.netbeans.microedition.lcdui.SplashScreen;
 import untuneboyo.connection.*;
 import untuneboyo.pathplanning.AdjacencyMatriks;
+import untuneboyo.pathplanning.Jalan;
+import untuneboyo.pathplanning.Route;
+import untuneboyo.pathplanning.StopPoint;
 
 /**
  * @author baskoro
@@ -206,16 +209,21 @@ public class MainMidLet extends MIDlet implements CommandListener {
             // write pre-init user code here
             stringItem = new StringItem("stringItem", null);//GEN-LINE:|38-getter|1|38-postInit
             // write post-init user code here
-            AdjacencyMatriks matriks = new AdjacencyMatriks(3);
-            matriks.LoadMatriksFromFile();
+            Jalan.LoadJalanFromFile();
+            StopPoint.LoadStopPointFromFile();
+            Route.LoadRouteFromFile();
             StringBuffer sb = new StringBuffer();
-            int[][] matrik = matriks.GetMatriks();
-            for(int i=0;i<3;i++)
+            
+            for(int i=0;i<Route.RouteCollection.size();i++)
             {
-                for(int j=0;j<3;j++)
+                Route rute = (Route) Route.RouteCollection.elementAt(i);
+                sb.append(rute.getNama() + "," + rute.getArah() + "\n");
+                
+                for(int j=0;j<rute.getTempatBerhenti().size();j++)
                 {
-                    sb.append(matrik[i][j]);
-                    sb.append(" ");
+                    StopPoint sp = (StopPoint) rute.getTempatBerhenti().elementAt(j);
+                    sb.append(sp.getNama());
+                    sb.append(",");
                 }
                 sb.append("\n");
             }
