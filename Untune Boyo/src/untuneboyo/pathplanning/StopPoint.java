@@ -155,4 +155,8 @@ public class StopPoint {
     {
         return parent;
     }
+
+    public Vector getRoutesList() {
+        return routesList;
+    }
 }

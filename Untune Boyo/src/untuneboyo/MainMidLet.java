@@ -10,6 +10,8 @@ import javax.microedition.lcdui.*;
 import org.netbeans.microedition.lcdui.SplashScreen;
 import untuneboyo.connection.*;
 import untuneboyo.pathplanning.AdjacencyMatriks;
+import untuneboyo.pathplanning.CommonStops;
+import untuneboyo.pathplanning.ConnectivityMatriks;
 import untuneboyo.pathplanning.Jalan;
 import untuneboyo.pathplanning.Route;
 import untuneboyo.pathplanning.StopPoint;
@@ -212,18 +214,19 @@ public class MainMidLet extends MIDlet implements CommandListener {
             Jalan.LoadJalanFromFile();
             StopPoint.LoadStopPointFromFile();
             Route.LoadRouteFromFile();
-            StringBuffer sb = new StringBuffer();
+            CommonStops.LoadCommonStopsCollection();
+            ConnectivityMatriks cm = new ConnectivityMatriks();
+            cm.GenerateMatriks();
             
-            for(int i=0;i<Route.RouteCollection.size();i++)
+            StringBuffer sb = new StringBuffer();
+            int[][] matriks = cm.getConnMatriks();
+            
+            for(int i=0;i<cm.getSize();i++)
             {
-                Route rute = (Route) Route.RouteCollection.elementAt(i);
-                sb.append(rute.getNama() + "," + rute.getArah() + "\n");
-                
-                for(int j=0;j<rute.getTempatBerhenti().size();j++)
+                for(int j=0;j<cm.getSize();j++)
                 {
-                    StopPoint sp = (StopPoint) rute.getTempatBerhenti().elementAt(j);
-                    sb.append(sp.getNama());
-                    sb.append(",");
+                    sb.append(matriks[i][j]);
+                    sb.append(" ");
                 }
                 sb.append("\n");
             }
