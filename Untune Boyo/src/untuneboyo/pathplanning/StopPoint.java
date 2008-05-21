@@ -134,6 +134,22 @@ public class StopPoint {
         return 0;
     }
     
+    public static Vector Search(String keyword)
+    {
+        Vector searchResult = new Vector();
+        
+        for(int i=0; i<StopPointCollection.size(); i++)
+        {
+            StopPoint sp =  (StopPoint) StopPointCollection.elementAt(i);
+            if(sp.getNama().toLowerCase().indexOf(keyword.toLowerCase()) >= 0  || sp.getParent().getNama().toLowerCase().indexOf(keyword.toLowerCase()) >= 0)
+            {
+                searchResult.addElement(sp);
+            }
+        }
+        
+        return searchResult;
+    }
+    
     public boolean equals(StopPoint sp)
     {
         if(this.nama.equals(sp.getNama()))

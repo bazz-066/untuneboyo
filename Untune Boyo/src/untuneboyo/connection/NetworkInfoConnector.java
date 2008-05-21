@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.SocketConnection;
-import untuneboyo.MainMidLet;
+import untuneboyo.UntuneBoyo;
 
 /**
  *
@@ -21,11 +21,11 @@ public class NetworkInfoConnector
     private SocketConnection scSocket;
     private InputStream iStream;
     private boolean isDone;
-    private MainMidLet midlet;
+    private UntuneBoyo midlet;
     
     private static final int BUFSIZE = 2048;
     
-    public NetworkInfoConnector(MainMidLet midlet)
+    public NetworkInfoConnector(UntuneBoyo midlet)
     {
         this.isDone = false;
         this.midlet = midlet;

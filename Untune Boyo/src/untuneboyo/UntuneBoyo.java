@@ -5,6 +5,7 @@
 
 package untuneboyo;
 
+import java.util.Vector;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import org.netbeans.microedition.lcdui.SplashScreen;
@@ -21,43 +22,54 @@ import untuneboyo.pathplanning.StopPoint;
 /**
  * @author baskoro
  */
-public class MainMidLet extends MIDlet implements CommandListener {
+public class UntuneBoyo extends MIDlet implements CommandListener {
 
     private boolean midletPaused = false;
     private NetworkInfoConnector noc;
+    private int state;
+        
+    private static final int ALL = 0, SOURCE = 1, DEST = 2;
     
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private java.util.Hashtable __previousDisplayables = new java.util.Hashtable();
+    private List listPilihan;
     private Form frmCariArea;
-    private TextField textField;
-    private ChoiceGroup cgHasilCariArea;
+    private TextField tfCariArea;
     private Map mainMap;
     private List listHasilCari;
     private Form frmCariRute;
-    private TextField tfAsal;
     private TextField tfTujuan;
+    private TextField tfAsal;
     private Spacer spacer;
     private List listHasilCariRute;
     private WaitScreen loadingScreen;
-    private SplashScreen splashScreen;
     private List listDetailRute;
+    private WaitScreen networkInfoScreen;
+    private Form frmNetworkInfo;
     private Command findCommand;
-    private Command findAreaCommand;
     private Command cariAreaKembaliCommand;
+    private Command findAreaCommand;
     private Command backCommand;
     private Command cariRuteCommand;
-    private Command cariAsalCommand;
     private Command cariTujuanCommand;
+    private Command cariAsalCommand;
     private Command backToMapCommand;
     private Command showInMapCommand;
+    private Command cariDariCommand;
+    private Command cariKeCommand;
+    private Command posisiAsalCommand;
+    private Command posisiTujCommand;
+    private SimpleCancellableTask loadingDataTask;
     private SimpleCancellableTask task;
+    private Image imgSandClock;
     //</editor-fold>//GEN-END:|fields|0|
 
     /**
-     * The MainMidLet constructor.
+     * The UntuneBoyo constructor.
      */
-    public MainMidLet() {
+    public UntuneBoyo() {
         this.noc = new NetworkInfoConnector(this);
+        this.state = UntuneBoyo.ALL;
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -94,7 +106,7 @@ public class MainMidLet extends MIDlet implements CommandListener {
      */
     public void startMIDlet() {//GEN-END:|3-startMIDlet|0|3-preAction
         // write pre-action user code here
-        switchDisplayable(null, getSplashScreen());//GEN-LINE:|3-startMIDlet|1|3-postAction
+        switchDisplayable(null, getLoadingScreen());//GEN-LINE:|3-startMIDlet|1|3-postAction
         // write post-action user code here
     }//GEN-BEGIN:|3-startMIDlet|2|
     //</editor-fold>//GEN-END:|3-startMIDlet|2|
@@ -149,12 +161,24 @@ public class MainMidLet extends MIDlet implements CommandListener {
                 // write pre-action user code here
                 switchDisplayable(null, getListHasilCari());//GEN-LINE:|7-commandAction|4|36-postAction
                 // write post-action user code here
+                this.getListHasilCari().deleteAll();
+                Vector searchResult = StopPoint.Search(this.tfCariArea.getString());
+                for(int i=0; i<searchResult.size(); i++)
+                {
+                    StringBuffer sbHasil = new StringBuffer();
+                    sbHasil.append(((StopPoint)searchResult.elementAt(i)).getParent().getNama());
+                    sbHasil.append("-");
+                    sbHasil.append(((StopPoint)searchResult.elementAt(i)).getNama());
+
+                    listHasilCari.append(sbHasil.toString(), null);
+                }
             }//GEN-BEGIN:|7-commandAction|5|90-preAction
         } else if (displayable == frmCariRute) {
             if (command == cariAsalCommand) {//GEN-END:|7-commandAction|5|90-preAction
                 // write pre-action user code here
                 switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|6|90-postAction
                 // write post-action user code here
+                this.state = UntuneBoyo.SOURCE;
             } else if (command == cariRuteCommand) {//GEN-LINE:|7-commandAction|7|84-preAction
                 // write pre-action user code here
                 switchDisplayable(null, getListHasilCariRute());//GEN-LINE:|7-commandAction|8|84-postAction
@@ -163,67 +187,91 @@ public class MainMidLet extends MIDlet implements CommandListener {
                 // write pre-action user code here
                 switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|10|93-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|11|109-preAction
+                this.state = UntuneBoyo.DEST;
+            } else if (command == posisiAsalCommand) {//GEN-LINE:|7-commandAction|11|136-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getNetworkInfoScreen());//GEN-LINE:|7-commandAction|12|136-postAction
+                // write post-action user code here
+            } else if (command == posisiTujCommand) {//GEN-LINE:|7-commandAction|13|138-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getNetworkInfoScreen());//GEN-LINE:|7-commandAction|14|138-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|15|109-preAction
         } else if (displayable == listDetailRute) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|11|109-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|15|109-preAction
                 // write pre-action user code here
-                listDetailRuteAction();//GEN-LINE:|7-commandAction|12|109-postAction
+                listDetailRuteAction();//GEN-LINE:|7-commandAction|16|109-postAction
                 // write post-action user code here
-            } else if (command == backToMapCommand) {//GEN-LINE:|7-commandAction|13|116-preAction
+            } else if (command == backToMapCommand) {//GEN-LINE:|7-commandAction|17|116-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|14|116-postAction
+//GEN-LINE:|7-commandAction|18|116-postAction
                 // write post-action user code here
-            } else if (command == showInMapCommand) {//GEN-LINE:|7-commandAction|15|112-preAction
+            } else if (command == showInMapCommand) {//GEN-LINE:|7-commandAction|19|112-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|16|112-postAction
+                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|20|112-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|17|52-preAction
+            }//GEN-BEGIN:|7-commandAction|21|52-preAction
         } else if (displayable == listHasilCari) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|17|52-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|21|52-preAction
                 // write pre-action user code here
-                listHasilCariAction();//GEN-LINE:|7-commandAction|18|52-postAction
+                listHasilCariAction();//GEN-LINE:|7-commandAction|22|52-postAction
                 // write post-action user code here
-            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|19|56-preAction
+            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|23|56-preAction
                 // write pre-action user code here
-                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|20|56-postAction
+                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|24|56-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|21|69-preAction
+            }//GEN-BEGIN:|7-commandAction|25|69-preAction
         } else if (displayable == listHasilCariRute) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|21|69-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|25|69-preAction
                 // write pre-action user code here
-                listHasilCariRuteAction();//GEN-LINE:|7-commandAction|22|69-postAction
+                listHasilCariRuteAction();//GEN-LINE:|7-commandAction|26|69-postAction
                 // write post-action user code here
-            } else if (command == backToMapCommand) {//GEN-LINE:|7-commandAction|23|103-preAction
+            } else if (command == backToMapCommand) {//GEN-LINE:|7-commandAction|27|103-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|24|103-postAction
+                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|28|103-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|25|75-preAction
+            }//GEN-BEGIN:|7-commandAction|29|129-preAction
+        } else if (displayable == listPilihan) {
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|29|129-preAction
+                // write pre-action user code here
+                listPilihanAction();//GEN-LINE:|7-commandAction|30|129-postAction
+                // write post-action user code here
+            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|31|131-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getListHasilCari());//GEN-LINE:|7-commandAction|32|131-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|33|75-preAction
         } else if (displayable == loadingScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|25|75-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|33|75-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|26|75-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|34|75-postAction
                 // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|27|74-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|35|74-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|28|74-postAction
+                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|36|74-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|29|45-preAction
+            }//GEN-BEGIN:|7-commandAction|37|45-preAction
         } else if (displayable == mainMap) {
-            if (command == findAreaCommand) {//GEN-END:|7-commandAction|29|45-preAction
+            if (command == findAreaCommand) {//GEN-END:|7-commandAction|37|45-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|30|45-postAction
+                switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|38|45-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|31|80-preAction
-        } else if (displayable == splashScreen) {
-            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|31|80-preAction
+                this.state = UntuneBoyo.ALL;
+            }//GEN-BEGIN:|7-commandAction|39|141-preAction
+        } else if (displayable == networkInfoScreen) {
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|39|141-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|32|80-postAction
+                switchDisplayable(null, getFrmCariRute());//GEN-LINE:|7-commandAction|40|141-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|33|7-postCommandAction
-        }//GEN-END:|7-commandAction|33|7-postCommandAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|41|140-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getFrmNetworkInfo());//GEN-LINE:|7-commandAction|42|140-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|43|7-postCommandAction
+        }//GEN-END:|7-commandAction|43|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|34|
-    //</editor-fold>//GEN-END:|7-commandAction|34|
+    }//GEN-BEGIN:|7-commandAction|44|
+    //</editor-fold>//GEN-END:|7-commandAction|44|
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: mainMap ">//GEN-BEGIN:|32-getter|0|32-preInit
     /**
@@ -252,7 +300,7 @@ public class MainMidLet extends MIDlet implements CommandListener {
     public Form getFrmCariArea() {
         if (frmCariArea == null) {//GEN-END:|34-getter|0|34-preInit
             // write pre-init user code here
-            frmCariArea = new Form("Cari Tempat", new Item[] { getTextField(), getCgHasilCariArea() });//GEN-BEGIN:|34-getter|1|34-postInit
+            frmCariArea = new Form("Cari Tempat", new Item[] { getTfCariArea() });//GEN-BEGIN:|34-getter|1|34-postInit
             frmCariArea.addCommand(getFindCommand());
             frmCariArea.addCommand(getCariAreaKembaliCommand());
             frmCariArea.setCommandListener(this);//GEN-END:|34-getter|1|34-postInit
@@ -292,43 +340,36 @@ public class MainMidLet extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|44-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: listHasilCari ">//GEN-BEGIN:|50-getter|0|50-preInit
-    /**
-     * Returns an initiliazed instance of listHasilCari component.
-     * @return the initialized component instance
-     */
-    public List getListHasilCari() {
-        if (listHasilCari == null) {//GEN-END:|50-getter|0|50-preInit
-            // write pre-init user code here
-            listHasilCari = new List("Hasil Pencarian", Choice.IMPLICIT);//GEN-BEGIN:|50-getter|1|50-postInit
-            listHasilCari.append("Nama Tempat xxx", null);
-            listHasilCari.addCommand(getBackCommand());
-            listHasilCari.setCommandListener(this);
-            listHasilCari.setFitPolicy(Choice.TEXT_WRAP_DEFAULT);
-            listHasilCari.setSelectedFlags(new boolean[] { false });//GEN-END:|50-getter|1|50-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|50-getter|2|
-        return listHasilCari;
-    }
-    //</editor-fold>//GEN-END:|50-getter|2|
-
     //<editor-fold defaultstate="collapsed" desc=" Generated Method: listHasilCariAction ">//GEN-BEGIN:|50-action|0|50-preAction
     /**
      * Performs an action assigned to the selected list element in the listHasilCari component.
      */
     public void listHasilCariAction() {//GEN-END:|50-action|0|50-preAction
         // enter pre-action user code here
-        String __selectedString = getListHasilCari().getString(getListHasilCari().getSelectedIndex());//GEN-BEGIN:|50-action|1|105-preAction
-        if (__selectedString != null) {
-            if (__selectedString.equals("Nama Tempat xxx")) {//GEN-END:|50-action|1|105-preAction
-                // write pre-action user code here
-                switchDisplayable(null, getFrmCariRute());//GEN-LINE:|50-action|2|105-postAction
-                // write post-action user code here
-            }//GEN-BEGIN:|50-action|3|50-postAction
-        }//GEN-END:|50-action|3|50-postAction
+        String __selectedString = getListHasilCari().getString(getListHasilCari().getSelectedIndex());//GEN-LINE:|50-action|1|50-postAction
         // enter post-action user code here
-    }//GEN-BEGIN:|50-action|4|
-    //</editor-fold>//GEN-END:|50-action|4|
+        if(this.state == UntuneBoyo.ALL)
+        {
+            this.switchDisplayable(null, this.getListPilihan());
+            this.listPilihan.set(0, "Cari rute dari " + __selectedString, null);
+            this.listPilihan.set(1, "Cari rute ke " + __selectedString, null);
+        }
+        else if(this.state == UntuneBoyo.SOURCE)
+        {
+            String asal = this.getNamaStopPoint(__selectedString);
+            this.getTfAsal().setString(asal);
+            this.switchDisplayable(null, getFrmCariRute());
+            this.state = UntuneBoyo.ALL;
+        }
+        else if(this.state == UntuneBoyo.DEST)
+        {
+            String tujuan = this.getNamaStopPoint(__selectedString);
+            this.getTfTujuan().setString(tujuan);
+            this.switchDisplayable(null, getFrmCariRute());
+            this.state = UntuneBoyo.ALL;
+        }
+    }//GEN-BEGIN:|50-action|2|
+    //</editor-fold>//GEN-END:|50-action|2|
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: cariAreaKembaliCommand ">//GEN-BEGIN:|46-getter|0|46-preInit
     /**
@@ -372,6 +413,8 @@ public class MainMidLet extends MIDlet implements CommandListener {
             frmCariRute.addCommand(getCariAsalCommand());
             frmCariRute.addCommand(getCariTujuanCommand());
             frmCariRute.addCommand(getCariRuteCommand());
+            frmCariRute.addCommand(getPosisiAsalCommand());
+            frmCariRute.addCommand(getPosisiTujCommand());
             frmCariRute.setCommandListener(this);//GEN-END:|62-getter|1|62-postInit
             // write post-init user code here
         }//GEN-BEGIN:|62-getter|2|
@@ -427,30 +470,40 @@ public class MainMidLet extends MIDlet implements CommandListener {
             loadingScreen = new WaitScreen(getDisplay());//GEN-BEGIN:|71-getter|1|71-postInit
             loadingScreen.setTitle("Loading...");
             loadingScreen.setCommandListener(this);
-            loadingScreen.setTask(getTask());//GEN-END:|71-getter|1|71-postInit
+            loadingScreen.setImage(getImgSandClock());
+            loadingScreen.setText("Loading Data ...");
+            loadingScreen.setTask(getLoadingDataTask());//GEN-END:|71-getter|1|71-postInit
             // write post-init user code here
         }//GEN-BEGIN:|71-getter|2|
         return loadingScreen;
     }
     //</editor-fold>//GEN-END:|71-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: task ">//GEN-BEGIN:|76-getter|0|76-preInit
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: loadingDataTask ">//GEN-BEGIN:|76-getter|0|76-preInit
     /**
-     * Returns an initiliazed instance of task component.
+     * Returns an initiliazed instance of loadingDataTask component.
      * @return the initialized component instance
      */
-    public SimpleCancellableTask getTask() {
-        if (task == null) {//GEN-END:|76-getter|0|76-preInit
+    public SimpleCancellableTask getLoadingDataTask() {
+        if (loadingDataTask == null) {//GEN-END:|76-getter|0|76-preInit
             // write pre-init user code here
-            task = new SimpleCancellableTask();//GEN-BEGIN:|76-getter|1|76-execute
-            task.setExecutable(new org.netbeans.microedition.util.Executable() {
+            loadingDataTask = new SimpleCancellableTask();//GEN-BEGIN:|76-getter|1|76-execute
+            loadingDataTask.setExecutable(new org.netbeans.microedition.util.Executable() {
                 public void execute() throws Exception {//GEN-END:|76-getter|1|76-execute
                     // write task-execution user code here
+                    int retval = Jalan.LoadJalanFromFile();
+                    if(retval == -1) { throw new Exception("Gagal load data jalan"); }
+                    retval = StopPoint.LoadStopPointFromFile();
+                    if(retval == -1) { throw new Exception("Gagal load data tempat berhenti"); }
+                    retval = Route.LoadRouteFromFile();
+                    if(retval == -1) { throw new Exception("Gagal load data rute"); }
+                    CommonStops.LoadCommonStopsCollection();
+                    ConnectivityMatriks.GenerateMatriks();                    
                 }//GEN-BEGIN:|76-getter|2|76-postInit
             });//GEN-END:|76-getter|2|76-postInit
             // write post-init user code here
         }//GEN-BEGIN:|76-getter|3|
-        return task;
+        return loadingDataTask;
     }
     //</editor-fold>//GEN-END:|76-getter|3|
 
@@ -477,7 +530,7 @@ public class MainMidLet extends MIDlet implements CommandListener {
     public TextField getTfTujuan() {
         if (tfTujuan == null) {//GEN-END:|87-getter|0|87-preInit
             // write pre-init user code here
-            tfTujuan = new TextField("Tujuan :", null, 32, TextField.ANY);//GEN-LINE:|87-getter|1|87-postInit
+            tfTujuan = new TextField("Tujuan :", null, 32, TextField.ANY | TextField.UNEDITABLE);//GEN-LINE:|87-getter|1|87-postInit
             // write post-init user code here
         }//GEN-BEGIN:|87-getter|2|
         return tfTujuan;
@@ -499,23 +552,6 @@ public class MainMidLet extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|88-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: splashScreen ">//GEN-BEGIN:|79-getter|0|79-preInit
-    /**
-     * Returns an initiliazed instance of splashScreen component.
-     * @return the initialized component instance
-     */
-    public SplashScreen getSplashScreen() {
-        if (splashScreen == null) {//GEN-END:|79-getter|0|79-preInit
-            // write pre-init user code here
-            splashScreen = new SplashScreen(getDisplay());//GEN-BEGIN:|79-getter|1|79-postInit
-            splashScreen.setTitle("splashScreen");
-            splashScreen.setCommandListener(this);//GEN-END:|79-getter|1|79-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|79-getter|2|
-        return splashScreen;
-    }
-    //</editor-fold>//GEN-END:|79-getter|2|
-
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: cariRuteCommand ">//GEN-BEGIN:|83-getter|0|83-preInit
     /**
      * Returns an initiliazed instance of cariRuteCommand component.
@@ -531,35 +567,20 @@ public class MainMidLet extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|83-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: textField ">//GEN-BEGIN:|95-getter|0|95-preInit
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: tfCariArea ">//GEN-BEGIN:|95-getter|0|95-preInit
     /**
-     * Returns an initiliazed instance of textField component.
+     * Returns an initiliazed instance of tfCariArea component.
      * @return the initialized component instance
      */
-    public TextField getTextField() {
-        if (textField == null) {//GEN-END:|95-getter|0|95-preInit
+    public TextField getTfCariArea() {
+        if (tfCariArea == null) {//GEN-END:|95-getter|0|95-preInit
             // write pre-init user code here
-            textField = new TextField("Masukkan Kata Kunci / Nama Jalan :", null, 50, TextField.ANY);//GEN-LINE:|95-getter|1|95-postInit
+            tfCariArea = new TextField("Masukkan Kata Kunci / Nama Jalan :", null, 50, TextField.ANY);//GEN-LINE:|95-getter|1|95-postInit
             // write post-init user code here
         }//GEN-BEGIN:|95-getter|2|
-        return textField;
+        return tfCariArea;
     }
     //</editor-fold>//GEN-END:|95-getter|2|
-
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: cgHasilCariArea ">//GEN-BEGIN:|96-getter|0|96-preInit
-    /**
-     * Returns an initiliazed instance of cgHasilCariArea component.
-     * @return the initialized component instance
-     */
-    public ChoiceGroup getCgHasilCariArea() {
-        if (cgHasilCariArea == null) {//GEN-END:|96-getter|0|96-preInit
-            // write pre-init user code here
-            cgHasilCariArea = new ChoiceGroup("Hasil Pencarian :", Choice.MULTIPLE);//GEN-LINE:|96-getter|1|96-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|96-getter|2|
-        return cgHasilCariArea;
-    }
-    //</editor-fold>//GEN-END:|96-getter|2|
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: cariAsalCommand ">//GEN-BEGIN:|89-getter|0|89-preInit
     /**
@@ -650,7 +671,212 @@ public class MainMidLet extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|111-getter|2|
 
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: cariDariCommand ">//GEN-BEGIN:|119-getter|0|119-preInit
+    /**
+     * Returns an initiliazed instance of cariDariCommand component.
+     * @return the initialized component instance
+     */
+    public Command getCariDariCommand() {
+        if (cariDariCommand == null) {//GEN-END:|119-getter|0|119-preInit
+            // write pre-init user code here
+            cariDariCommand = new Command("Cari Rute Dari ...", Command.ITEM, 0);//GEN-LINE:|119-getter|1|119-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|119-getter|2|
+        return cariDariCommand;
+    }
+    //</editor-fold>//GEN-END:|119-getter|2|
 
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: cariKeCommand ">//GEN-BEGIN:|120-getter|0|120-preInit
+    /**
+     * Returns an initiliazed instance of cariKeCommand component.
+     * @return the initialized component instance
+     */
+    public Command getCariKeCommand() {
+        if (cariKeCommand == null) {//GEN-END:|120-getter|0|120-preInit
+            // write pre-init user code here
+            cariKeCommand = new Command("Cari Rute Ke ...", Command.ITEM, 0);//GEN-LINE:|120-getter|1|120-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|120-getter|2|
+        return cariKeCommand;
+    }
+    //</editor-fold>//GEN-END:|120-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: listHasilCari ">//GEN-BEGIN:|50-getter|0|50-preInit
+    /**
+     * Returns an initiliazed instance of listHasilCari component.
+     * @return the initialized component instance
+     */
+    public List getListHasilCari() {
+        if (listHasilCari == null) {//GEN-END:|50-getter|0|50-preInit
+            // write pre-init user code here
+            listHasilCari = new List("Hasil Pencarian", Choice.IMPLICIT);//GEN-BEGIN:|50-getter|1|50-postInit
+            listHasilCari.addCommand(getBackCommand());
+            listHasilCari.setCommandListener(this);
+            listHasilCari.setFitPolicy(Choice.TEXT_WRAP_DEFAULT);
+            listHasilCari.setSelectedFlags(new boolean[] {  });//GEN-END:|50-getter|1|50-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|50-getter|2|
+        return listHasilCari;
+    }
+    //</editor-fold>//GEN-END:|50-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: listPilihan ">//GEN-BEGIN:|128-getter|0|128-preInit
+    /**
+     * Returns an initiliazed instance of listPilihan component.
+     * @return the initialized component instance
+     */
+    public List getListPilihan() {
+        if (listPilihan == null) {//GEN-END:|128-getter|0|128-preInit
+            // write pre-init user code here
+            listPilihan = new List("Pilih salah satu", Choice.IMPLICIT);//GEN-BEGIN:|128-getter|1|128-postInit
+            listPilihan.append("Cari Rute Dari", null);
+            listPilihan.append("Cari Rute Ke", null);
+            listPilihan.addCommand(getBackCommand());
+            listPilihan.setCommandListener(this);
+            listPilihan.setSelectedFlags(new boolean[] { true, false });//GEN-END:|128-getter|1|128-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|128-getter|2|
+        return listPilihan;
+    }
+    //</editor-fold>//GEN-END:|128-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Method: listPilihanAction ">//GEN-BEGIN:|128-action|0|128-preAction
+    /**
+     * Performs an action assigned to the selected list element in the listPilihan component.
+     */
+    public void listPilihanAction() {//GEN-END:|128-action|0|128-preAction
+        // enter pre-action user code here
+        switch (getListPilihan().getSelectedIndex()) {//GEN-BEGIN:|128-action|1|133-preAction
+            case 0://GEN-END:|128-action|1|133-preAction
+                // write pre-action user code here
+//GEN-LINE:|128-action|2|133-postAction
+                // write post-action user code here
+                String asal = this.getNamaStopPoint(this.getListPilihan().getString(0));
+                this.getTfAsal().setString(asal);
+                this.switchDisplayable(null, getFrmCariRute());
+                break;//GEN-BEGIN:|128-action|3|134-preAction
+            case 1://GEN-END:|128-action|3|134-preAction
+                // write pre-action user code here
+//GEN-LINE:|128-action|4|134-postAction
+                // write post-action user code here
+                String tujuan = this.getNamaStopPoint(this.getListPilihan().getString(1));
+                this.getTfTujuan().setString(tujuan);
+                this.switchDisplayable(null, getFrmCariRute());
+                break;//GEN-BEGIN:|128-action|5|128-postAction
+        }//GEN-END:|128-action|5|128-postAction
+        // enter post-action user code here
+    }//GEN-BEGIN:|128-action|6|
+    //</editor-fold>//GEN-END:|128-action|6|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: networkInfoScreen ">//GEN-BEGIN:|139-getter|0|139-preInit
+    /**
+     * Returns an initiliazed instance of networkInfoScreen component.
+     * @return the initialized component instance
+     */
+    public WaitScreen getNetworkInfoScreen() {
+        if (networkInfoScreen == null) {//GEN-END:|139-getter|0|139-preInit
+            // write pre-init user code here
+            networkInfoScreen = new WaitScreen(getDisplay());//GEN-BEGIN:|139-getter|1|139-postInit
+            networkInfoScreen.setTitle("Mengambil Data Cell ID");
+            networkInfoScreen.setCommandListener(this);
+            networkInfoScreen.setImage(getImgSandClock());
+            networkInfoScreen.setText("Ambil Data Jaringan...");
+            networkInfoScreen.setTask(getTask());//GEN-END:|139-getter|1|139-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|139-getter|2|
+        return networkInfoScreen;
+    }
+    //</editor-fold>//GEN-END:|139-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: posisiAsalCommand ">//GEN-BEGIN:|135-getter|0|135-preInit
+    /**
+     * Returns an initiliazed instance of posisiAsalCommand component.
+     * @return the initialized component instance
+     */
+    public Command getPosisiAsalCommand() {
+        if (posisiAsalCommand == null) {//GEN-END:|135-getter|0|135-preInit
+            // write pre-init user code here
+            posisiAsalCommand = new Command("Item", Command.ITEM, 0);//GEN-LINE:|135-getter|1|135-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|135-getter|2|
+        return posisiAsalCommand;
+    }
+    //</editor-fold>//GEN-END:|135-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: posisiTujCommand ">//GEN-BEGIN:|137-getter|0|137-preInit
+    /**
+     * Returns an initiliazed instance of posisiTujCommand component.
+     * @return the initialized component instance
+     */
+    public Command getPosisiTujCommand() {
+        if (posisiTujCommand == null) {//GEN-END:|137-getter|0|137-preInit
+            // write pre-init user code here
+            posisiTujCommand = new Command("Item", Command.ITEM, 0);//GEN-LINE:|137-getter|1|137-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|137-getter|2|
+        return posisiTujCommand;
+    }
+    //</editor-fold>//GEN-END:|137-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: task ">//GEN-BEGIN:|142-getter|0|142-preInit
+    /**
+     * Returns an initiliazed instance of task component.
+     * @return the initialized component instance
+     */
+    public SimpleCancellableTask getTask() {
+        if (task == null) {//GEN-END:|142-getter|0|142-preInit
+            // write pre-init user code here
+            task = new SimpleCancellableTask();//GEN-BEGIN:|142-getter|1|142-execute
+            task.setExecutable(new org.netbeans.microedition.util.Executable() {
+                public void execute() throws Exception {//GEN-END:|142-getter|1|142-execute
+                    // write task-execution user code here
+                }//GEN-BEGIN:|142-getter|2|142-postInit
+            });//GEN-END:|142-getter|2|142-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|142-getter|3|
+        return task;
+    }
+    //</editor-fold>//GEN-END:|142-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: imgSandClock ">//GEN-BEGIN:|145-getter|0|145-preInit
+    /**
+     * Returns an initiliazed instance of imgSandClock component.
+     * @return the initialized component instance
+     */
+    public Image getImgSandClock() {
+        if (imgSandClock == null) {//GEN-END:|145-getter|0|145-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|145-getter|1|145-@java.io.IOException
+                imgSandClock = Image.createImage("/untuneboyo/resource/sand_clock.gif");
+            } catch (java.io.IOException e) {//GEN-END:|145-getter|1|145-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|145-getter|2|145-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|145-getter|3|
+        return imgSandClock;
+    }
+    //</editor-fold>//GEN-END:|145-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: frmNetworkInfo ">//GEN-BEGIN:|146-getter|0|146-preInit
+    /**
+     * Returns an initiliazed instance of frmNetworkInfo component.
+     * @return the initialized component instance
+     */
+    public Form getFrmNetworkInfo() {
+        if (frmNetworkInfo == null) {//GEN-END:|146-getter|0|146-preInit
+            // write pre-init user code here
+            frmNetworkInfo = new Form("Network Info");//GEN-LINE:|146-getter|1|146-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|146-getter|2|
+        return frmNetworkInfo;
+    }
+    //</editor-fold>//GEN-END:|146-getter|2|
+
+    private String getNamaStopPoint(String key)
+    {
+        String[] tmp = NetworkInfoConnector.split(key, '-');
+        return tmp[tmp.length - 1];
+    }
 
 
 
