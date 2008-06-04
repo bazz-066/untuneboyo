@@ -100,7 +100,12 @@ public class NetworkInfoConnector
     public String[] GetNetworkInfo()
     {
         String rawInfo = this.GetRawNetworkInfo();
-        String[] networkInfo = split(rawInfo, ' ');
+        String[] networkInfo = null;
+        
+        if(!rawInfo.startsWith("exception"))
+        {
+            networkInfo = split(rawInfo, ' ');
+        }
         
         return networkInfo;
     }

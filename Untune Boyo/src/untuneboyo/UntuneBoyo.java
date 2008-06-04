@@ -25,14 +25,13 @@ import untuneboyo.pathplanning.StopPoint;
 public class UntuneBoyo extends MIDlet implements CommandListener {
 
     private boolean midletPaused = false;
-    private NetworkInfoConnector noc;
     private int state;
+    private String area, MCC, MNC, LAC, CellID, signal;
         
-    private static final int ALL = 0, SOURCE = 1, DEST = 2;
+    private static final int ALL = 0, SOURCE = 1, DEST = 2, NEW = 3;
     
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private java.util.Hashtable __previousDisplayables = new java.util.Hashtable();
-    private List listPilihan;
     private Form frmCariArea;
     private TextField tfCariArea;
     private Map mainMap;
@@ -45,7 +44,18 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     private WaitScreen loadingScreen;
     private List listDetailRute;
     private WaitScreen networkInfoScreen;
+    private List listPilihan;
     private Form frmNetworkInfo;
+    private StringItem siCellID;
+    private StringItem siSignal;
+    private Spacer spacer1;
+    private ChoiceGroup cgStopPoint;
+    private StringItem siMCC;
+    private StringItem siMNC;
+    private StringItem siLAC;
+    private Alert alertGagalUpdate;
+    private Alert alertConfirmUpload;
+    private WaitScreen updateScreen;
     private Command findCommand;
     private Command cariAreaKembaliCommand;
     private Command findAreaCommand;
@@ -57,18 +67,19 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     private Command showInMapCommand;
     private Command cariDariCommand;
     private Command cariKeCommand;
-    private Command posisiAsalCommand;
     private Command posisiTujCommand;
+    private Command posisiAsalCommand;
+    private Command uploadCommand;
     private SimpleCancellableTask loadingDataTask;
     private SimpleCancellableTask task;
     private Image imgSandClock;
+    private SimpleCancellableTask taskUpdate;
     //</editor-fold>//GEN-END:|fields|0|
 
     /**
      * The UntuneBoyo constructor.
      */
     public UntuneBoyo() {
-        this.noc = new NetworkInfoConnector(this);
         this.state = UntuneBoyo.ALL;
     }
 
@@ -196,82 +207,104 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
                 // write pre-action user code here
                 switchDisplayable(null, getNetworkInfoScreen());//GEN-LINE:|7-commandAction|14|138-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|15|109-preAction
+            }//GEN-BEGIN:|7-commandAction|15|171-preAction
+        } else if (displayable == frmNetworkInfo) {
+            if (command == backCommand) {//GEN-END:|7-commandAction|15|171-preAction
+                // write pre-action user code here
+                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|16|171-postAction
+                // write post-action user code here
+            } else if (command == uploadCommand) {//GEN-LINE:|7-commandAction|17|162-preAction
+                // write pre-action user code here
+                this.state = UntuneBoyo.NEW;
+                switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|18|162-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|19|109-preAction
         } else if (displayable == listDetailRute) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|15|109-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|19|109-preAction
                 // write pre-action user code here
-                listDetailRuteAction();//GEN-LINE:|7-commandAction|16|109-postAction
+                listDetailRuteAction();//GEN-LINE:|7-commandAction|20|109-postAction
                 // write post-action user code here
-            } else if (command == backToMapCommand) {//GEN-LINE:|7-commandAction|17|116-preAction
+            } else if (command == backToMapCommand) {//GEN-LINE:|7-commandAction|21|116-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|18|116-postAction
+//GEN-LINE:|7-commandAction|22|116-postAction
                 // write post-action user code here
-            } else if (command == showInMapCommand) {//GEN-LINE:|7-commandAction|19|112-preAction
+            } else if (command == showInMapCommand) {//GEN-LINE:|7-commandAction|23|112-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|20|112-postAction
+                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|24|112-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|21|52-preAction
+            }//GEN-BEGIN:|7-commandAction|25|52-preAction
         } else if (displayable == listHasilCari) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|21|52-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|25|52-preAction
                 // write pre-action user code here
-                listHasilCariAction();//GEN-LINE:|7-commandAction|22|52-postAction
+                listHasilCariAction();//GEN-LINE:|7-commandAction|26|52-postAction
                 // write post-action user code here
-            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|23|56-preAction
+            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|27|56-preAction
                 // write pre-action user code here
-                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|24|56-postAction
+                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|28|56-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|25|69-preAction
+            }//GEN-BEGIN:|7-commandAction|29|69-preAction
         } else if (displayable == listHasilCariRute) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|25|69-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|29|69-preAction
                 // write pre-action user code here
-                listHasilCariRuteAction();//GEN-LINE:|7-commandAction|26|69-postAction
+                listHasilCariRuteAction();//GEN-LINE:|7-commandAction|30|69-postAction
                 // write post-action user code here
-            } else if (command == backToMapCommand) {//GEN-LINE:|7-commandAction|27|103-preAction
+            } else if (command == backToMapCommand) {//GEN-LINE:|7-commandAction|31|103-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|28|103-postAction
+                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|32|103-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|29|129-preAction
+            }//GEN-BEGIN:|7-commandAction|33|129-preAction
         } else if (displayable == listPilihan) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|29|129-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|33|129-preAction
                 // write pre-action user code here
-                listPilihanAction();//GEN-LINE:|7-commandAction|30|129-postAction
+                listPilihanAction();//GEN-LINE:|7-commandAction|34|129-postAction
                 // write post-action user code here
-            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|31|131-preAction
+            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|35|131-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getListHasilCari());//GEN-LINE:|7-commandAction|32|131-postAction
+                switchDisplayable(null, getListHasilCari());//GEN-LINE:|7-commandAction|36|131-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|33|75-preAction
+            }//GEN-BEGIN:|7-commandAction|37|75-preAction
         } else if (displayable == loadingScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|33|75-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|37|75-preAction
                 // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|34|75-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|38|75-postAction
                 // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|35|74-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|39|74-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|36|74-postAction
+                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|40|74-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|37|45-preAction
+            }//GEN-BEGIN:|7-commandAction|41|45-preAction
         } else if (displayable == mainMap) {
-            if (command == findAreaCommand) {//GEN-END:|7-commandAction|37|45-preAction
+            if (command == findAreaCommand) {//GEN-END:|7-commandAction|41|45-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|38|45-postAction
+                switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|42|45-postAction
                 // write post-action user code here
                 this.state = UntuneBoyo.ALL;
-            }//GEN-BEGIN:|7-commandAction|39|141-preAction
+            }//GEN-BEGIN:|7-commandAction|43|141-preAction
         } else if (displayable == networkInfoScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|39|141-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|43|141-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getFrmCariRute());//GEN-LINE:|7-commandAction|40|141-postAction
+                switchDisplayable(null, getFrmCariRute());//GEN-LINE:|7-commandAction|44|141-postAction
                 // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|41|140-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|45|140-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getFrmNetworkInfo());//GEN-LINE:|7-commandAction|42|140-postAction
+//GEN-LINE:|7-commandAction|46|140-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|43|7-postCommandAction
-        }//GEN-END:|7-commandAction|43|7-postCommandAction
+                
+            }//GEN-BEGIN:|7-commandAction|47|165-preAction
+        } else if (displayable == updateScreen) {
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|47|165-preAction
+                // write pre-action user code here
+                switchDisplayable(getAlertGagalUpdate(), getFrmNetworkInfo());//GEN-LINE:|7-commandAction|48|165-postAction
+                // write post-action user code here
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|49|164-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getFrmNetworkInfo());//GEN-LINE:|7-commandAction|50|164-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|51|7-postCommandAction
+        }//GEN-END:|7-commandAction|51|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|44|
-    //</editor-fold>//GEN-END:|7-commandAction|44|
+    }//GEN-BEGIN:|7-commandAction|52|
+    //</editor-fold>//GEN-END:|7-commandAction|52|
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: mainMap ">//GEN-BEGIN:|32-getter|0|32-preInit
     /**
@@ -368,6 +401,12 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
             this.switchDisplayable(null, getFrmCariRute());
             this.state = UntuneBoyo.ALL;
         }
+        else if(this.state == UntuneBoyo.NEW)
+        {
+            this.area = this.getNamaStopPoint(__selectedString);
+            this.switchDisplayable(this.getAlertConfirmUpload(), this.getUpdateScreen());
+            this.state = UntuneBoyo.ALL;
+        }
     }//GEN-BEGIN:|50-action|2|
     //</editor-fold>//GEN-END:|50-action|2|
 
@@ -412,9 +451,9 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
             frmCariRute = new Form("Cari Rute Bemo", new Item[] { getTfAsal(), getSpacer(), getTfTujuan() });//GEN-BEGIN:|62-getter|1|62-postInit
             frmCariRute.addCommand(getCariAsalCommand());
             frmCariRute.addCommand(getCariTujuanCommand());
-            frmCariRute.addCommand(getCariRuteCommand());
             frmCariRute.addCommand(getPosisiAsalCommand());
             frmCariRute.addCommand(getPosisiTujCommand());
+            frmCariRute.addCommand(getCariRuteCommand());
             frmCariRute.setCommandListener(this);//GEN-END:|62-getter|1|62-postInit
             // write post-init user code here
         }//GEN-BEGIN:|62-getter|2|
@@ -434,6 +473,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
             listHasilCariRute.append("bemo X - bemo Y....", null);
             listHasilCariRute.addCommand(getBackToMapCommand());
             listHasilCariRute.setCommandListener(this);
+            listHasilCariRute.setSelectCommand(getBackToMapCommand());
             listHasilCariRute.setSelectedFlags(new boolean[] { false });//GEN-END:|68-getter|1|68-postInit
             // write post-init user code here
         }//GEN-BEGIN:|68-getter|2|
@@ -560,7 +600,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     public Command getCariRuteCommand() {
         if (cariRuteCommand == null) {//GEN-END:|83-getter|0|83-preInit
             // write pre-init user code here
-            cariRuteCommand = new Command("Ok", Command.OK, 0);//GEN-LINE:|83-getter|1|83-postInit
+            cariRuteCommand = new Command("Cari Rute !", Command.OK, 0);//GEN-LINE:|83-getter|1|83-postInit
             // write post-init user code here
         }//GEN-BEGIN:|83-getter|2|
         return cariRuteCommand;
@@ -796,7 +836,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     public Command getPosisiAsalCommand() {
         if (posisiAsalCommand == null) {//GEN-END:|135-getter|0|135-preInit
             // write pre-init user code here
-            posisiAsalCommand = new Command("Item", Command.ITEM, 0);//GEN-LINE:|135-getter|1|135-postInit
+            posisiAsalCommand = new Command("Ambil Posisi Untuk Asal", Command.ITEM, 0);//GEN-LINE:|135-getter|1|135-postInit
             // write post-init user code here
         }//GEN-BEGIN:|135-getter|2|
         return posisiAsalCommand;
@@ -811,7 +851,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     public Command getPosisiTujCommand() {
         if (posisiTujCommand == null) {//GEN-END:|137-getter|0|137-preInit
             // write pre-init user code here
-            posisiTujCommand = new Command("Item", Command.ITEM, 0);//GEN-LINE:|137-getter|1|137-postInit
+            posisiTujCommand = new Command("Ambil Posisi Untuk Tujuan", Command.ITEM, 0);//GEN-LINE:|137-getter|1|137-postInit
             // write post-init user code here
         }//GEN-BEGIN:|137-getter|2|
         return posisiTujCommand;
@@ -830,6 +870,28 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
             task.setExecutable(new org.netbeans.microedition.util.Executable() {
                 public void execute() throws Exception {//GEN-END:|142-getter|1|142-execute
                     // write task-execution user code here
+                    NetworkInfoConnector noc = new NetworkInfoConnector(UntuneBoyo.this);
+                    String[] netInfo = noc.GetNetworkInfo();
+                    
+                    if(netInfo == null)
+                    {
+                        throw new Exception("Gagal dapet info jaringan");
+                    }
+                    
+                    UntuneBoyo.this.MCC = netInfo[0];
+                    
+                    if(netInfo[1].length() == 1)
+                    {
+                        UntuneBoyo.this.MNC =  "0" + netInfo[1];
+                    }
+                    else
+                    {
+                        UntuneBoyo.this.MNC =  netInfo[1];
+                    }
+                    
+                    UntuneBoyo.this.LAC = netInfo[2];
+                    UntuneBoyo.this.CellID = netInfo[3];
+                    UntuneBoyo.this.signal = netInfo[4];
                 }//GEN-BEGIN:|142-getter|2|142-postInit
             });//GEN-END:|142-getter|2|142-postInit
             // write post-init user code here
@@ -865,12 +927,216 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     public Form getFrmNetworkInfo() {
         if (frmNetworkInfo == null) {//GEN-END:|146-getter|0|146-preInit
             // write pre-init user code here
-            frmNetworkInfo = new Form("Network Info");//GEN-LINE:|146-getter|1|146-postInit
+            frmNetworkInfo = new Form("Network Info", new Item[] { getSiMCC(), getSiMNC(), getSiLAC(), getSiCellID(), getSiSignal(), getSpacer1(), getCgStopPoint() });//GEN-BEGIN:|146-getter|1|146-postInit
+            frmNetworkInfo.addCommand(getUploadCommand());
+            frmNetworkInfo.addCommand(getBackCommand());
+            frmNetworkInfo.setCommandListener(this);//GEN-END:|146-getter|1|146-postInit
             // write post-init user code here
         }//GEN-BEGIN:|146-getter|2|
         return frmNetworkInfo;
     }
     //</editor-fold>//GEN-END:|146-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: siMCC ">//GEN-BEGIN:|149-getter|0|149-preInit
+    /**
+     * Returns an initiliazed instance of siMCC component.
+     * @return the initialized component instance
+     */
+    public StringItem getSiMCC() {
+        if (siMCC == null) {//GEN-END:|149-getter|0|149-preInit
+            // write pre-init user code here
+            siMCC = new StringItem("MCC :", null);//GEN-LINE:|149-getter|1|149-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|149-getter|2|
+        return siMCC;
+    }
+    //</editor-fold>//GEN-END:|149-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: siMNC ">//GEN-BEGIN:|150-getter|0|150-preInit
+    /**
+     * Returns an initiliazed instance of siMNC component.
+     * @return the initialized component instance
+     */
+    public StringItem getSiMNC() {
+        if (siMNC == null) {//GEN-END:|150-getter|0|150-preInit
+            // write pre-init user code here
+            siMNC = new StringItem("MNC :", null);//GEN-LINE:|150-getter|1|150-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|150-getter|2|
+        return siMNC;
+    }
+    //</editor-fold>//GEN-END:|150-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: siLAC ">//GEN-BEGIN:|151-getter|0|151-preInit
+    /**
+     * Returns an initiliazed instance of siLAC component.
+     * @return the initialized component instance
+     */
+    public StringItem getSiLAC() {
+        if (siLAC == null) {//GEN-END:|151-getter|0|151-preInit
+            // write pre-init user code here
+            siLAC = new StringItem("LAC :", null);//GEN-LINE:|151-getter|1|151-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|151-getter|2|
+        return siLAC;
+    }
+    //</editor-fold>//GEN-END:|151-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: siCellID ">//GEN-BEGIN:|152-getter|0|152-preInit
+    /**
+     * Returns an initiliazed instance of siCellID component.
+     * @return the initialized component instance
+     */
+    public StringItem getSiCellID() {
+        if (siCellID == null) {//GEN-END:|152-getter|0|152-preInit
+            // write pre-init user code here
+            siCellID = new StringItem("Cell ID", null);//GEN-LINE:|152-getter|1|152-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|152-getter|2|
+        return siCellID;
+    }
+    //</editor-fold>//GEN-END:|152-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: siSignal ">//GEN-BEGIN:|153-getter|0|153-preInit
+    /**
+     * Returns an initiliazed instance of siSignal component.
+     * @return the initialized component instance
+     */
+    public StringItem getSiSignal() {
+        if (siSignal == null) {//GEN-END:|153-getter|0|153-preInit
+            // write pre-init user code here
+            siSignal = new StringItem("Signal Strength :", null);//GEN-LINE:|153-getter|1|153-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|153-getter|2|
+        return siSignal;
+    }
+    //</editor-fold>//GEN-END:|153-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: spacer1 ">//GEN-BEGIN:|154-getter|0|154-preInit
+    /**
+     * Returns an initiliazed instance of spacer1 component.
+     * @return the initialized component instance
+     */
+    public Spacer getSpacer1() {
+        if (spacer1 == null) {//GEN-END:|154-getter|0|154-preInit
+            // write pre-init user code here
+            spacer1 = new Spacer(100, 50);//GEN-BEGIN:|154-getter|1|154-postInit
+            spacer1.setLayout(ImageItem.LAYOUT_CENTER | ImageItem.LAYOUT_NEWLINE_BEFORE | ImageItem.LAYOUT_NEWLINE_AFTER);
+            spacer1.setPreferredSize(-1, -1);//GEN-END:|154-getter|1|154-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|154-getter|2|
+        return spacer1;
+    }
+    //</editor-fold>//GEN-END:|154-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: cgStopPoint ">//GEN-BEGIN:|155-getter|0|155-preInit
+    /**
+     * Returns an initiliazed instance of cgStopPoint component.
+     * @return the initialized component instance
+     */
+    public ChoiceGroup getCgStopPoint() {
+        if (cgStopPoint == null) {//GEN-END:|155-getter|0|155-preInit
+            // write pre-init user code here
+            cgStopPoint = new ChoiceGroup("Kemungkinan Posisi Anda ada di :", Choice.EXCLUSIVE);//GEN-BEGIN:|155-getter|1|155-postInit
+            cgStopPoint.setFitPolicy(Choice.TEXT_WRAP_DEFAULT);
+            cgStopPoint.setSelectedFlags(new boolean[] {  });//GEN-END:|155-getter|1|155-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|155-getter|2|
+        return cgStopPoint;
+    }
+    //</editor-fold>//GEN-END:|155-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: uploadCommand ">//GEN-BEGIN:|161-getter|0|161-preInit
+    /**
+     * Returns an initiliazed instance of uploadCommand component.
+     * @return the initialized component instance
+     */
+    public Command getUploadCommand() {
+        if (uploadCommand == null) {//GEN-END:|161-getter|0|161-preInit
+            // write pre-init user code here
+            uploadCommand = new Command("Upload/Update Data Baru", Command.ITEM, 0);//GEN-LINE:|161-getter|1|161-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|161-getter|2|
+        return uploadCommand;
+    }
+    //</editor-fold>//GEN-END:|161-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: updateScreen ">//GEN-BEGIN:|163-getter|0|163-preInit
+    /**
+     * Returns an initiliazed instance of updateScreen component.
+     * @return the initialized component instance
+     */
+    public WaitScreen getUpdateScreen() {
+        if (updateScreen == null) {//GEN-END:|163-getter|0|163-preInit
+            // write pre-init user code here
+            updateScreen = new WaitScreen(getDisplay());//GEN-BEGIN:|163-getter|1|163-postInit
+            updateScreen.setTitle("waitScreen");
+            updateScreen.setCommandListener(this);
+            updateScreen.setTask(getTaskUpdate());//GEN-END:|163-getter|1|163-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|163-getter|2|
+        return updateScreen;
+    }
+    //</editor-fold>//GEN-END:|163-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: alertGagalUpdate ">//GEN-BEGIN:|169-getter|0|169-preInit
+    /**
+     * Returns an initiliazed instance of alertGagalUpdate component.
+     * @return the initialized component instance
+     */
+    public Alert getAlertGagalUpdate() {
+        if (alertGagalUpdate == null) {//GEN-END:|169-getter|0|169-preInit
+            // write pre-init user code here
+            alertGagalUpdate = new Alert("Error", "Gagal Menambah Data BTS ke Server", null, AlertType.ERROR);//GEN-BEGIN:|169-getter|1|169-postInit
+            alertGagalUpdate.setTimeout(Alert.FOREVER);//GEN-END:|169-getter|1|169-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|169-getter|2|
+        return alertGagalUpdate;
+    }
+    //</editor-fold>//GEN-END:|169-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: taskUpdate ">//GEN-BEGIN:|166-getter|0|166-preInit
+    /**
+     * Returns an initiliazed instance of taskUpdate component.
+     * @return the initialized component instance
+     */
+    public SimpleCancellableTask getTaskUpdate() {
+        if (taskUpdate == null) {//GEN-END:|166-getter|0|166-preInit
+            // write pre-init user code here
+            taskUpdate = new SimpleCancellableTask();//GEN-BEGIN:|166-getter|1|166-execute
+            taskUpdate.setExecutable(new org.netbeans.microedition.util.Executable() {
+                public void execute() throws Exception {//GEN-END:|166-getter|1|166-execute
+                    // write task-execution user code here
+                    NetworkInfoUpdater nio = new NetworkInfoUpdater();
+                    int status = nio.uploadNewData(UntuneBoyo.this.MCC, UntuneBoyo.this.MNC, UntuneBoyo.this.LAC, UntuneBoyo.this.CellID, UntuneBoyo.this.signal, UntuneBoyo.this.area);
+                    
+                    if(status == -1)
+                    {
+                        throw new Exception("Gagal update");
+                    }
+                }//GEN-BEGIN:|166-getter|2|166-postInit
+            });//GEN-END:|166-getter|2|166-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|166-getter|3|
+        return taskUpdate;
+    }
+    //</editor-fold>//GEN-END:|166-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: alertConfirmUpload ">//GEN-BEGIN:|175-getter|0|175-preInit
+    /**
+     * Returns an initiliazed instance of alertConfirmUpload component.
+     * @return the initialized component instance
+     */
+    public Alert getAlertConfirmUpload() {
+        if (alertConfirmUpload == null) {//GEN-END:|175-getter|0|175-preInit
+            // write pre-init user code here
+            alertConfirmUpload = new Alert("alert", null, null, AlertType.CONFIRMATION);//GEN-BEGIN:|175-getter|1|175-postInit
+            alertConfirmUpload.setTimeout(Alert.FOREVER);//GEN-END:|175-getter|1|175-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|175-getter|2|
+        return alertConfirmUpload;
+    }
+    //</editor-fold>//GEN-END:|175-getter|2|
 
     private String getNamaStopPoint(String key)
     {
