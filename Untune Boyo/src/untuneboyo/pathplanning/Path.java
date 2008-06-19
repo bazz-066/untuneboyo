@@ -35,7 +35,28 @@ public class Path
     {
         return rute;
     }
-
+    
+    public String getRute(int index)
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append(index);
+        sb.append(". ");
+        
+        for(int i=0; i<this.rute.size(); i++)
+        {
+            Route r = (Route) this.rute.elementAt(i);
+            sb.append(r.getNama());
+            sb.append("-");
+            sb.append(r.getArah());
+            if(i != this.rute.size() - 1)
+            {
+                sb.append(",");
+            }
+        }
+        
+        return sb.toString();
+    }
+    
     public Vector getStopPoint() 
     {
         return stopPoint;

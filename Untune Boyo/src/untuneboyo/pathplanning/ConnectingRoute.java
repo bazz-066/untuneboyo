@@ -14,13 +14,16 @@ import java.util.Vector;
 public class ConnectingRoute 
 {
     private Route source, dest;
+    private StopPoint spSource, spDest;
     private Vector rutePerantara;
     private Vector sp1, sp2;
     
-    public ConnectingRoute(Route source, Route dest)
+    public ConnectingRoute(Route source, Route dest, StopPoint spSource, StopPoint spDest)
     {
         this.source = source;
         this.dest = dest;
+        this.spSource = spSource;
+        this.spDest = spDest;
         this.rutePerantara = new Vector();
         this.sp1 = new Vector();
         this.sp2 = new Vector();
@@ -50,23 +53,30 @@ public class ConnectingRoute
     
     public boolean IsRuteValid(Route perantara)
     {
-        StopPoint spSource, spDest;
+        StopPoint tmpSource, tmpDest;
         int iSource, iDest;
         
-        spSource = this.CariMinStopPoint(perantara);
-        spDest = this.CariMaxStopPoint(perantara);
+        tmpSource = this.CariMinStopPoint(perantara);
+        tmpDest = this.CariMaxStopPoint(perantara);
         
-        if(spSource == null || spDest == null)
+        if(tmpSource == null || tmpDest == null)
         {
             return false;
         }
         
-        iSource = perantara.GetIndexTempatBerhenti(spSource);
-        iDest = perantara.GetIndexTempatBerhenti(spDest);
-        this.sp1.addElement(spSource);
-        this.sp2.addElement(spDest);
-        
-        return iSource < iDest;
+        iSource = perantara.GetIndexTempatBerhenti(tmpSource);
+        iDest = perantara.GetIndexTempatBerhenti(tmpDest);
+        if(this.source.GetIndexTempatBerhenti(this.spSource) < this.source.GetIndexTempatBerhenti(tmpSource) && this.dest.GetIndexTempatBerhenti(tmpDest) < this.dest.GetIndexTempatBerhenti(spDest) && iSource < iDest)
+        {
+            this.sp1.addElement(tmpSource);
+            this.sp2.addElement(tmpDest);
+            
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     public StopPoint CariMinStopPoint(Route perantara)

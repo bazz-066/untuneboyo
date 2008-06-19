@@ -59,7 +59,10 @@ public class PathPlanning
         {
             for(int j=0; j<routeDest.size(); j++)
             {
-                if(routeSource.elementAt(i).equals(routeDest.elementAt(j)))
+                Route rSource = (Route) routeSource.elementAt(i);
+                Route rDest = (Route) routeDest.elementAt(j);
+                
+                if(routeSource.elementAt(i).equals(routeDest.elementAt(j)) && rSource.GetIndexTempatBerhenti(spSource) < rDest.GetIndexTempatBerhenti(spDest))
                 {
                     Path path = new Path();
                     path.TambahRute((Route)routeSource.elementAt(i));
@@ -81,19 +84,36 @@ public class PathPlanning
                 Route source, dest;
                 source = (Route) routeSource.elementAt(i);
                 dest = (Route) routeDest.elementAt(j);
+                int status = 0;
                 
                 CommonStops cs = CommonStops.GetCommonStops(source, dest);
                 
-                if(cs.GetJumlahTempatBerhenti() > 0)
+                if(cs != null)
                 {
-                    Path path = new Path();
-                    path.TambahRute((Route)routeSource.elementAt(i));
-                    path.TambahStopPoint(spSource);
-                    path.TambahRute((Route)routeDest.elementAt(j));
-                    path.TambahStopPoint((StopPoint)cs.getTempatBerhenti().elementAt(0));
-                    path.TambahStopPoint(spDest);
-                    
-                    route.addElement(path);
+                    if(cs.GetJumlahTempatBerhenti() > 0)
+                    {
+                        Path path = new Path();
+                        path.TambahRute((Route)routeSource.elementAt(i));
+                        path.TambahStopPoint(spSource);
+                        path.TambahRute((Route)routeDest.elementAt(j));
+                        
+                        for(int k=0; k<cs.GetJumlahTempatBerhenti(); k++)
+                        {
+                            StopPoint transfer = (StopPoint)cs.getTempatBerhenti().elementAt(k);
+                            if(source.GetIndexTempatBerhenti(spSource) < source.GetIndexTempatBerhenti(transfer) && dest.GetIndexTempatBerhenti(transfer) < dest.GetIndexTempatBerhenti(spDest))
+                            {
+                                path.TambahStopPoint(transfer);
+                                status = 1;
+                                break;
+                            }
+                        }
+                        path.TambahStopPoint(spDest);
+                        
+                        if(status == 1)
+                        {
+                            route.addElement(path);
+                        }
+                    }
                 }
             }
         }
@@ -109,7 +129,7 @@ public class PathPlanning
                 source = (Route) routeSource.elementAt(i);
                 dest = (Route) routeDest.elementAt(j);
                 
-                ConnectingRoute cr = new ConnectingRoute(source, dest);
+                ConnectingRoute cr = new ConnectingRoute(source, dest, spSource, spDest);
                 cr.CariRutePerantara();
                                 
                 for(int k=0; k<cr.getRutePerantara().size(); k++)

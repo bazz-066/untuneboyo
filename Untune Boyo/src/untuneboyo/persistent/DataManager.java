@@ -25,31 +25,100 @@ public class DataManager
         this.pmManager = PersistableManager.getInstance();
     }
     
+    public String[][] getBTSData(int start, int length)
+    {
+        try {
+            ObjectSet cells = this.pmManager.find(Class.forName("untuneboyo.persistent.BTSData"), null, new CellComparator());
+            ObjectSet cellLocs = this.pmManager.find(Class.forName("untuneboyo.persistent.CellLocation"), null, new SignalComparator());
+            
+            if(start >= cellLocs.size())
+            {
+                return new String[][]{ {" ", " "} };
+            }
+            else
+            {
+                int batas;
+                String[][] result;
+                
+                if(start + length >= cellLocs.size())
+                {
+                    batas = cellLocs.size();
+                    result = new String[batas-start][2];
+                }
+                else
+                {
+                    batas = start + length;
+                    result = new String[length][2];
+                }
+                
+                int index = 0, counter = 0;
+                
+                for(int i=0; i<cells.size(); i++)
+                {
+                    BTSData cell = (BTSData) cells.get(i);
+
+                    ObjectSet locations = this.pmManager.find(Class.forName("untuneboyo.persistent.CellLocation"), new CellLocationFilter(cell.key, "", true), new SignalComparator());
+                    for(int j=0; j<locations.size(); j++)
+                    {
+                        if(counter >= start && counter < start + length)
+                        {
+                            result[index][0] = cell.CellID;
+
+                            CellLocation loc = (CellLocation) locations.get(j);
+
+                            result[index][1] = loc.stopPoint;
+                            index++;
+                        }
+                        
+                        counter++;
+                    }
+                }
+                
+                return result;
+            }
+        } catch (FloggyException ex) {
+            return new String[][]{ {" ", " "} };
+        } catch (ClassNotFoundException ex) {
+            return new String[][]{ {" ", " "} };
+        }
+    }
+    
     public StopPoint[] getLocation(String MCC, String MNC, String LAC, String CellId)
     {
         try 
         {
-            ObjectSet cells = this.pmManager.find(BTSData.class, new CellFilter(MCC, MNC, LAC, CellId), new CellComparator());
-            BTSData cell = (BTSData) cells.get(0);
-            
-            ObjectSet locations = this.pmManager.find(CellLocation.class, new CellLocationFilter(cell.key, "", true), new SignalComparator());
-            
-            StopPoint[] stops = new StopPoint[locations.size()];
-            for(int i=0; i<locations.size(); i++)
+            ObjectSet cells = this.pmManager.find(Class.forName("untuneboyo.persistent.BTSData"), new CellFilter(MCC, MNC, LAC, CellId), new CellComparator());
+            if(cells.size() > 0)
             {
-                CellLocation loc = (CellLocation) locations.get(i);
-                stops[i] = StopPoint.GetStopPointFromName(loc.stopPoint);
+                BTSData cell = (BTSData) cells.get(0);
+
+                ObjectSet locations = this.pmManager.find(Class.forName("untuneboyo.persistent.CellLocation"), new CellLocationFilter(cell.key, "", true), new SignalComparator());
+
+                StopPoint[] stops = new StopPoint[locations.size()];
+                for(int i=0; i<locations.size(); i++)
+                {
+                    CellLocation loc = (CellLocation) locations.get(i);
+                    stops[i] = StopPoint.GetStopPointFromName(loc.stopPoint);
+                }
+
+                return stops;
             }
-            
-            return stops;
+            else
+            {
+                return null;
+            }
         } 
+        catch (ClassNotFoundException ex) 
+        {
+            return null;
+        }        
         catch (FloggyException ex) 
         {
             return null;
         }
     }
     
-    public void updateData(Vector newDataBTS, Vector newDataLoc)
+    public void updateData(Vector newDataBTS, Vector newDataLoc, String lastUpdateBTS, String lastUpdateLoc)
     {
         for(int i=0; i<newDataBTS.size(); i++)
         {
@@ -65,6 +134,21 @@ public class DataManager
                 cell.CellID = cellData[4];
 
                 int id = this.pmManager.save(cell);
+                LastUpdate lu = new LastUpdate();
+                
+                try
+                {
+                    this.pmManager.load(lu, 1);
+                }
+                catch(FloggyException ex)
+                {
+                    
+                }
+                
+                lu.lastUpdateBTS = lastUpdateBTS;
+                lu.lastUpdateLoc = lastUpdateLoc;
+                
+                this.pmManager.save(lu);
             } 
             catch (FloggyException ex) 
             {

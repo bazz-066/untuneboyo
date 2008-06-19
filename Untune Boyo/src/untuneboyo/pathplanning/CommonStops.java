@@ -60,9 +60,9 @@ public class CommonStops
     public static void LoadCommonStopsCollection()
     {
         int totRoute = Route.RouteCollection.size();
-        for(int i=0; i<totRoute/2; i++)
+        for(int i=0; i<totRoute; i++)
         {
-            for(int j=totRoute/2; j<totRoute; j++)
+            for(int j=i+1; j<totRoute; j++)
             {
                 CommonStops cs = new CommonStops((Route)Route.RouteCollection.elementAt(i), (Route)Route.RouteCollection.elementAt(j));
                 CommonStops.CommonStopsCollection.addElement(cs);

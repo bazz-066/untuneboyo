@@ -8,8 +8,10 @@ package untuneboyo.connection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
+import untuneboyo.persistent.DataManager;
 
 /**
  *
@@ -17,8 +19,14 @@ import javax.microedition.io.HttpConnection;
  */
 public class NetworkInfoUpdater 
 {
-    private static final String UPLOAD_URL = "http://127.0.0.1:6666/TA/upload.php";
-    private static final String DOWNLOAD_URL = "http://127.0.0.1:6666/TA/download.php";
+    //private static final String UPLOAD_URL = "http://untuneboyo.ncc.its-sby.edu/upload.php";
+    //private static final String DOWNLOADBTS_URL = "http://untuneboyo.ncc.its-sby.edu/updatebts.php";
+    //private static final String DOWNLOADLOC_URL = "http://untuneboyo.ncc.its-sby.edu/updateloc.php";
+    
+    private static final String UPLOAD_URL = "http://127.0.0.1:8080/TA/upload.php";
+    private static final String DOWNLOADBTS_URL = "http://127.0.0.1:8080/TA/updatebts.php";
+    private static final String DOWNLOADLOC_URL = "http://127.0.0.1:8080/TA/updateloc.php";
+    
     public static final int UPLOAD = 0, DOWNLOAD = 1;
     
     public NetworkInfoUpdater()
@@ -26,19 +34,100 @@ public class NetworkInfoUpdater
         
     }
     
-    public void downloadUpdate()
+    public void downloadUpdate() throws IOException
     {
         HttpConnection hcDownload = null;
         OutputStream os = null;
         InputStream is = null;
-        
+                
         try 
         {
-            hcDownload = (HttpConnection) Connector.open(NetworkInfoUpdater.DOWNLOAD_URL);
+            DataManager dm = new DataManager();
+            String[] lastUpdate = dm.getLastUpdate();
+            Vector newDataBTS = new Vector();
+            Vector newDataLoc = new Vector();
+            
+            StringBuffer requestMsq = new StringBuffer();
+            requestMsq.append("lastUpdate=");requestMsq.append(lastUpdate[0]);
+            hcDownload = (HttpConnection) Connector.open(NetworkInfoUpdater.DOWNLOADBTS_URL);
+            hcDownload.setRequestMethod(HttpConnection.POST);
+            hcDownload.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            hcDownload.setRequestProperty("Content-Length",  Integer.toString(requestMsq.toString().trim().length()));
+            
+            os = hcDownload.openDataOutputStream();
+            os.write(requestMsq.toString().trim().getBytes());
+            os.flush();
+            
+            is = hcDownload.openInputStream();
+            int read;
+            StringBuffer respondMsg = new StringBuffer();
+            String tglUpdateBTS = null, tglUpdateLoc = null;
+            
+            while((read = is.read()) != -1)
+            {
+                if((char)read != '\n')
+                {
+                    respondMsg.append((char)read);
+                }
+                
+                else
+                {
+                    String data = respondMsg.toString();
+                    String[] parsedData = NetworkInfoConnector.split(data,';');
+                    
+                    tglUpdateBTS = parsedData[5];
+                    newDataBTS.addElement(data);
+                    respondMsg = new StringBuffer();
+                }
+            }
+            
+            is.close();
+            os.close();
+            hcDownload.close();
+            
+            requestMsq = new StringBuffer();
+            requestMsq.append("lastUpdate=");requestMsq.append(lastUpdate[1]);
+            hcDownload = (HttpConnection) Connector.open(NetworkInfoUpdater.DOWNLOADLOC_URL);
+            hcDownload.setRequestMethod(HttpConnection.POST);
+            hcDownload.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            hcDownload.setRequestProperty("Content-Length",  Integer.toString(requestMsq.length()));
+            
+            os = hcDownload.openDataOutputStream();
+            os.write(requestMsq.toString().getBytes());
+            os.flush();
+            
+            is = hcDownload.openInputStream();
+            respondMsg = new StringBuffer();
+            
+            while((read = is.read()) != -1)
+            {
+                if((char)read != '\n')
+                {
+                    respondMsg.append((char)read);
+                }
+                else
+                {
+                    String data = respondMsg.toString();
+                    String[] parsedData = NetworkInfoConnector.split(data,';');
+                    
+                    tglUpdateLoc = parsedData[3];
+                    newDataLoc.addElement(data);
+                    respondMsg = new StringBuffer();
+                }
+            }
+            
+            is.close();
+            os.close();
+            hcDownload.close();
+            
+            if(tglUpdateBTS != null && tglUpdateLoc != null)
+            {
+                dm.updateData(newDataBTS, newDataLoc, tglUpdateBTS, tglUpdateLoc);
+            }
         } 
         catch (IOException ex) 
         {
-            ex.printStackTrace();
+            throw(ex);
         }
     }
     
