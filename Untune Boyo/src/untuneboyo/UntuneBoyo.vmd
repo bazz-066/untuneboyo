@@ -343,7 +343,7 @@
                     <Property name="commands" typeID="1C#CommandEventSource" value="A3:4_R2174_R1624_R171"/>
                     <Property name="title" typeID="Pjava.lang.String" value="VNetwork Info"/>
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
-                    <Property name="items" typeID="1Cjavax.microedition.lcdui.Item" value="A8:4_R1494_R1504_R1514_R1524_R1534_R1544_R1554_R179"/>
+                    <Property name="items" typeID="1Cjavax.microedition.lcdui.Item" value="A7:4_R1494_R1504_R1514_R1524_R1534_R1554_R179"/>
                     <Component componentID="152" typeID="Cjavax.microedition.lcdui.StringItem">
                         <Property name="instanceName" typeID="Pjava.lang.String" value="VsiCellID"/>
                         <Property name="label" typeID="Pjava.lang.String" value="VCell ID"/>
@@ -355,15 +355,6 @@
                         <Property name="label" typeID="Pjava.lang.String" value="VSignal Strength :"/>
                         <Property name="layout" typeID="Pint" value="V20992"/>
                         <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R8"/>
-                    </Component>
-                    <Component componentID="154" typeID="Cjavax.microedition.lcdui.Spacer">
-                        <Property name="instanceName" typeID="Pjava.lang.String" value="Vspacer1"/>
-                        <Property name="label" typeID="Pjava.lang.String" value="Vspacer1"/>
-                        <Property name="layout" typeID="Pint" value="V771"/>
-                        <Property name="preferredHeight" typeID="Pint" value="V-1"/>
-                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R8"/>
-                        <Property name="minHeight" typeID="Pint" value="V50"/>
-                        <Property name="minWidth" typeID="Pint" value="V100"/>
                     </Component>
                     <Component componentID="155" typeID="Cjavax.microedition.lcdui.ChoiceGroup">
                         <Property name="instanceName" typeID="Pjava.lang.String" value="VcgStopPoint"/>
@@ -652,15 +643,15 @@
                     <Property name="label" typeID="Pjava.lang.String" value="VLihat Data BTS"/>
                     <Property name="type" typeID="Pint" value="V8"/>
                 </Component>
-                <Component componentID="213" typeID="Cjavax.microedition.lcdui.Command">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VcariPosisiCommand"/>
-                    <Property name="label" typeID="Pjava.lang.String" value="VCari Posisi User"/>
-                    <Property name="type" typeID="Pint" value="V8"/>
-                </Component>
                 <Component componentID="216" typeID="Cjavax.microedition.lcdui.Command">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VpilihPosisiCommand"/>
                     <Property name="label" typeID="Pjava.lang.String" value="VPilih sebagai posisi"/>
                     <Property name="type" typeID="Pint" value="V4"/>
+                </Component>
+                <Component componentID="213" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VcariPosisiCommand"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VCari Posisi User"/>
+                    <Property name="type" typeID="Pint" value="V8"/>
                 </Component>
             </Component>
             <Component componentID="12" typeID="C#ResourcesCategory">
@@ -693,22 +684,22 @@
         </Component>
     </Document>
     <FlowScene version="1">
-        <Node componentID="34" descriptorID="componentNode34" x="784" y="563"/>
-        <Node componentID="32" descriptorID="componentNode32" x="784" y="202"/>
-        <Node componentID="62" descriptorID="componentNode62" x="299" y="202"/>
-        <Node componentID="139" descriptorID="componentNode139" x="34" y="414"/>
-        <Node componentID="108" descriptorID="componentNode108" x="1042" y="414"/>
-        <Node componentID="68" descriptorID="componentNode68" x="534" y="32"/>
-        <Node componentID="146" descriptorID="componentNode146" x="534" y="712"/>
-        <Node componentID="128" descriptorID="componentNode128" x="1273" y="861"/>
-        <Node componentID="163" descriptorID="componentNode163" x="299" y="861"/>
+        <Node componentID="71" descriptorID="componentNode71" x="534" y="414"/>
         <Node componentID="183" descriptorID="componentNode183" x="1273" y="202"/>
         <Node componentID="169" descriptorID="componentNode169" x="784" y="861"/>
         <Node componentID="175" descriptorID="componentNode175" x="1573" y="202"/>
-        <Node componentID="2" descriptorID="componentNode2" x="299" y="563"/>
-        <Node componentID="50" descriptorID="componentNode50" x="1042" y="712"/>
-        <Node componentID="71" descriptorID="componentNode71" x="534" y="414"/>
         <Node componentID="196" descriptorID="componentNode196" x="1042" y="32"/>
+        <Node componentID="50" descriptorID="componentNode50" x="1042" y="712"/>
+        <Node componentID="128" descriptorID="componentNode128" x="1273" y="861"/>
+        <Node componentID="108" descriptorID="componentNode108" x="1042" y="414"/>
+        <Node componentID="68" descriptorID="componentNode68" x="534" y="32"/>
+        <Node componentID="139" descriptorID="componentNode139" x="34" y="414"/>
+        <Node componentID="34" descriptorID="componentNode34" x="784" y="563"/>
+        <Node componentID="62" descriptorID="componentNode62" x="299" y="202"/>
+        <Node componentID="146" descriptorID="componentNode146" x="534" y="712"/>
+        <Node componentID="2" descriptorID="componentNode2" x="299" y="563"/>
+        <Node componentID="163" descriptorID="componentNode163" x="299" y="861"/>
         <Node componentID="188" descriptorID="componentNode188" x="1273" y="563"/>
+        <Node componentID="32" descriptorID="componentNode32" x="784" y="202"/>
     </FlowScene>
 </VisualDesign>

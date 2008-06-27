@@ -30,7 +30,8 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     private boolean midletPaused = false;
     private int state, index = 0;
     private String area, MCC, MNC, LAC, CellID, signal;
-        
+    private Path path;
+    
     private static final int ALL = 0, SOURCE = 1, DEST = 2, NEW = 3, batas = 4;
     
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
@@ -51,7 +52,6 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     private Form frmNetworkInfo;
     private StringItem siCellID;
     private StringItem siSignal;
-    private Spacer spacer1;
     private ChoiceGroup cgStopPoint;
     private StringItem siMCC;
     private StringItem siMNC;
@@ -82,8 +82,8 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     private Command sesudahCommand;
     private Command sebelumCommand;
     private Command dataBTSCommand;
-    private Command cariPosisiCommand;
     private Command pilihPosisiCommand;
+    private Command cariPosisiCommand;
     private SimpleCancellableTask loadingDataTask;
     private SimpleCancellableTask task;
     private Image imgSandClock;
@@ -327,6 +327,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
                 // write post-action user code here
             } else if (command == showInMapCommand) {//GEN-LINE:|7-commandAction|31|112-preAction
                 // write pre-action user code here
+                this.mainMap.setPath(this.path);
                 switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|32|112-postAction
                 // write post-action user code here
             }//GEN-BEGIN:|7-commandAction|33|52-preAction
@@ -639,6 +640,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
         String __selectedString = getListHasilCariRute().getString(getListHasilCariRute().getSelectedIndex());//GEN-LINE:|68-action|1|68-postAction
         // enter post-action user code here
         Path p = (Path) this.routes.elementAt(this.getListHasilCariRute().getSelectedIndex());
+        this.path = p;
         this.getListDetailRute().setTitle("Jalur dari " + this.source + " ke " + this.dest);
         Vector stop = p.getStopPoint();
         Vector route = p.getRute();
@@ -1086,7 +1088,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     public Form getFrmNetworkInfo() {
         if (frmNetworkInfo == null) {//GEN-END:|146-getter|0|146-preInit
             // write pre-init user code here
-            frmNetworkInfo = new Form("Network Info", new Item[] { getSiMCC(), getSiMNC(), getSiLAC(), getSiCellID(), getSiSignal(), getSpacer1(), getCgStopPoint(), getSiStopPoint() });//GEN-BEGIN:|146-getter|1|146-postInit
+            frmNetworkInfo = new Form("Network Info", new Item[] { getSiMCC(), getSiMNC(), getSiLAC(), getSiCellID(), getSiSignal(), getCgStopPoint(), getSiStopPoint() });//GEN-BEGIN:|146-getter|1|146-postInit
             frmNetworkInfo.addCommand(getPilihPosisiCommand());
             frmNetworkInfo.addCommand(getUploadCommand());
             frmNetworkInfo.addCommand(getBackCommand());
@@ -1177,22 +1179,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|153-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: spacer1 ">//GEN-BEGIN:|154-getter|0|154-preInit
-    /**
-     * Returns an initiliazed instance of spacer1 component.
-     * @return the initialized component instance
-     */
-    public Spacer getSpacer1() {
-        if (spacer1 == null) {//GEN-END:|154-getter|0|154-preInit
-            // write pre-init user code here
-            spacer1 = new Spacer(100, 50);//GEN-BEGIN:|154-getter|1|154-postInit
-            spacer1.setLayout(ImageItem.LAYOUT_CENTER | ImageItem.LAYOUT_NEWLINE_BEFORE | ImageItem.LAYOUT_NEWLINE_AFTER);
-            spacer1.setPreferredSize(-1, -1);//GEN-END:|154-getter|1|154-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|154-getter|2|
-        return spacer1;
-    }
-    //</editor-fold>//GEN-END:|154-getter|2|
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: cgStopPoint ">//GEN-BEGIN:|155-getter|0|155-preInit
     /**

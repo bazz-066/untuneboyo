@@ -55,6 +55,23 @@ public class StopPoint {
         return y;
     }
     
+    public static Vector GetStopPointFromPosisi(int x, int y, int xLimit, int yLimit)
+    {
+        Vector vStop = new Vector();
+        
+        for(int i=0; i<StopPoint.StopPointCollection.size(); i++)
+        {
+            StopPoint tmp = (StopPoint)StopPoint.StopPointCollection.elementAt(i);
+            
+            if((tmp.getX() >= x && tmp.getX() < xLimit) && (tmp.getY() >= y && tmp.getY() < yLimit))
+            {
+                vStop.addElement(tmp);
+            }
+        }
+        
+        return vStop;
+    }
+    
     public static StopPoint GetStopPointFromName(String nama)
     {
         for(int i=0; i<StopPoint.StopPointCollection.size(); i++)

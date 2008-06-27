@@ -42,6 +42,11 @@ public class Route {
         sp.HapusRuteLewat(this);
     }
     
+    public StopPoint getTempatBerhenti(int index)
+    {
+        return (StopPoint) this.tempatBerhenti.elementAt(index);
+    }
+    
     public int GetIndexTempatBerhenti(StopPoint sp)
     {
         return this.getTempatBerhenti().indexOf(sp);

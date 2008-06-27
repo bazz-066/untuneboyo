@@ -6,15 +6,20 @@
 package untuneboyo;
 
 import java.io.IOException;
+import java.util.Vector;
 import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.game.Sprite;
+import untuneboyo.pathplanning.Path;
+import untuneboyo.pathplanning.Route;
+import untuneboyo.pathplanning.StopPoint;
 
 /**
  * @author baskoro
  */
 public class Map extends Canvas implements CommandListener {
     private int xMap, yMap;
-    private static final int MAPWIDTH = 2828, MAPHEIGHT = 3894, PIECEWIDTH = 283, PIECEHEIGHT = 390;
+    public static final int MAPWIDTH = 2828, MAPHEIGHT = 3894, PIECEWIDTH = 283, PIECEHEIGHT = 390;
+    private Path path;
     
     /**
      * constructor
@@ -25,8 +30,9 @@ public class Map extends Canvas implements CommandListener {
 	    setCommandListener(this);
 	    // Add the Exit command
 	    addCommand(new Command("Exit", Command.EXIT, 1));
-            this.xMap = 886;
-            this.yMap = 666;
+            this.xMap = 1800;
+            this.yMap = 1800;
+            this.path = null;
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -44,14 +50,67 @@ public class Map extends Canvas implements CommandListener {
     {
         //tentukan kotak camera peta
         this.getCamera(g);
+        this.getStopPoint(g);
+        this.getRouteLine(g);
+    }
+    
+    public void setPath(Path path)
+    {
+        this.path = path;
+    }
+    
+    public void clearPath()
+    {
+        this.path = null;
+    }
+    
+    private void getRouteLine(Graphics g)
+    {
+        if(this.path != null)
+        {
+            Vector routes = this.path.getRute();
+            Vector stopPoint = this.path.getStopPoint();
+            int[] warna = new int[] { 0x00FF0000, 0x0000FF00, 0x000000FF };
+
+            for(int i=0; i<routes.size(); i++)
+            {
+                Route rute = (Route) routes.elementAt(i);
+                StopPoint stop = (StopPoint) stopPoint.elementAt(i);
+                int indexAwal = rute.GetIndexTempatBerhenti(stop);
+
+                stop = (StopPoint) stopPoint.elementAt(i+1);
+                int indexAkhir = rute.GetIndexTempatBerhenti(stop);
+                g.setColor(warna[i]);
+
+                for(int j=indexAwal; j<indexAkhir; j++)
+                {
+                    StopPoint s1, s2;
+                    s1 = rute.getTempatBerhenti(j);
+                    s2 = rute.getTempatBerhenti(j+1);
+                    g.drawLine(s1.getX() - this.xMap, s1.getY() - this.yMap, s2.getX() - this.xMap, s2.getY() - this.yMap);
+                }
+            }
+        }
+    }
+    
+    private void getStopPoint(Graphics g)
+    {
+        Vector vStop = StopPoint.GetStopPointFromPosisi(this.xMap, this.yMap, this.xMap + this.getWidth(), this.yMap + this.getHeight());
         
+        for(int i=0; i<vStop.size(); i++)
+        {
+            StopPoint stop = (StopPoint) vStop.elementAt(i);
+            int x = stop.getX() - this.xMap;
+            int y = stop.getY() - this.yMap;
+            g.fillArc(x, y, 8, 8, 0, 360);
+        }
     }
     
     private void getCamera(Graphics g)
     {
         try 
         {
-            int indexGambarKiri = (this.xMap / Map.PIECEWIDTH + 1) + ((this.yMap / Map.PIECEHEIGHT + 1) * 10);
+            int indexGambarKiri = (this.xMap / Map.PIECEWIDTH + 1) + ((this.yMap / Map.PIECEHEIGHT) * 10);
             
             Image topleft = Image.createImage(this.getFilename(indexGambarKiri));
             

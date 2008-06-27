@@ -19,13 +19,13 @@ import untuneboyo.persistent.DataManager;
  */
 public class NetworkInfoUpdater 
 {
-    //private static final String UPLOAD_URL = "http://untuneboyo.ncc.its-sby.edu/upload.php";
-    //private static final String DOWNLOADBTS_URL = "http://untuneboyo.ncc.its-sby.edu/updatebts.php";
-    //private static final String DOWNLOADLOC_URL = "http://untuneboyo.ncc.its-sby.edu/updateloc.php";
+    private static final String UPLOAD_URL = "http://untuneboyo.ncc.its-sby.edu/upload.php";
+    private static final String DOWNLOADBTS_URL = "http://untuneboyo.ncc.its-sby.edu/updatebts.php";
+    private static final String DOWNLOADLOC_URL = "http://untuneboyo.ncc.its-sby.edu/updateloc.php";
     
-    private static final String UPLOAD_URL = "http://127.0.0.1:8080/TA/upload.php";
-    private static final String DOWNLOADBTS_URL = "http://127.0.0.1:8080/TA/updatebts.php";
-    private static final String DOWNLOADLOC_URL = "http://127.0.0.1:8080/TA/updateloc.php";
+    //private static final String UPLOAD_URL = "http://127.0.0.1:8080/TA/upload.php";
+    //private static final String DOWNLOADBTS_URL = "http://127.0.0.1:8080/TA/updatebts.php";
+    //private static final String DOWNLOADLOC_URL = "http://127.0.0.1:8080/TA/updateloc.php";
     
     public static final int UPLOAD = 0, DOWNLOAD = 1;
     
