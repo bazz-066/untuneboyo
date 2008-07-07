@@ -87,6 +87,29 @@ public class Map extends Canvas implements CommandListener {
                     StopPoint s1, s2;
                     s1 = rute.getTempatBerhenti(j);
                     s2 = rute.getTempatBerhenti(j+1);
+                    
+                    int x1, y1, x2, y2;
+                    
+                    int jarak = Math.abs(s1.getX() - s2.getX());
+                    int jarak2 = Math.abs(s1.getY() - s2.getY());
+                    
+                    if(jarak < jarak2)
+                    {
+                        x1 = s1.getX() + 1;
+                        y1 = s1.getY();
+                        x2 = s1.getX() - 1;
+                        y2 = s1.getY();
+                    }
+                    else
+                    {
+                        x1 = s1.getX();
+                        y1 = s1.getY() + 1;
+                        x2 = s1.getX();
+                        y2 = s1.getY() - 1;
+                    }
+                    
+                    g.drawLine(x1 - this.xMap, y1 - this.yMap, s2.getX() - this.xMap, s2.getY() - this.yMap);
+                    g.drawLine(x2 - this.xMap, y2 - this.yMap, s2.getX() - this.xMap, s2.getY() - this.yMap);
                     g.drawLine(s1.getX() - this.xMap, s1.getY() - this.yMap, s2.getX() - this.xMap, s2.getY() - this.yMap);
                 }
             }
@@ -114,7 +137,7 @@ public class Map extends Canvas implements CommandListener {
             
             Image topleft = Image.createImage(this.getFilename(indexGambarKiri));
             
-            if(this.getHeight() < topleft.getHeight() - this.xMap % Map.PIECEWIDTH && this.getWidth() < topleft.getWidth() - this.yMap % Map.PIECEHEIGHT)
+            if(this.getHeight() < topleft.getHeight() - this.yMap % Map.PIECEHEIGHT && this.getWidth() < topleft.getWidth() - this.xMap % Map.PIECEWIDTH)
             {
                 g.drawRegion(topleft, this.xMap % Map.PIECEWIDTH, this.yMap % Map.PIECEHEIGHT, this.getWidth(), this.getHeight(), Sprite.TRANS_NONE, 0, 0, Graphics.TOP | Graphics.LEFT);
             }

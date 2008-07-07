@@ -81,6 +81,16 @@ public class NetworkInfoUpdater
                 }
             }
             
+            String data = respondMsg.toString();
+            String[] parsedData = NetworkInfoConnector.split(data,';');
+
+            if(parsedData.length == 6)
+            {
+                tglUpdateBTS = parsedData[5];
+                newDataBTS.addElement(data);
+            }
+            respondMsg = new StringBuffer();
+            
             is.close();
             os.close();
             hcDownload.close();
@@ -107,8 +117,8 @@ public class NetworkInfoUpdater
                 }
                 else
                 {
-                    String data = respondMsg.toString();
-                    String[] parsedData = NetworkInfoConnector.split(data,';');
+                    data = respondMsg.toString();
+                    parsedData = NetworkInfoConnector.split(data,';');
                     
                     tglUpdateLoc = parsedData[3];
                     newDataLoc.addElement(data);
@@ -116,6 +126,15 @@ public class NetworkInfoUpdater
                 }
             }
             
+            data = respondMsg.toString();
+            parsedData = NetworkInfoConnector.split(data,';');
+            
+            if(parsedData.length == 4)
+            {
+                tglUpdateLoc = parsedData[3];
+                newDataLoc.addElement(data);
+            }
+                        
             is.close();
             os.close();
             hcDownload.close();

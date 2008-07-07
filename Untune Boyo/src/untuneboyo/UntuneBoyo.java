@@ -64,6 +64,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     private WaitScreen updateScreen;
     private Form frmDataBTS;
     private TableItem tiBTS;
+    private TextBox tbDetailTiapRute;
     private Command findCommand;
     private Command cariAreaKembaliCommand;
     private Command findAreaCommand;
@@ -82,6 +83,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     private Command sesudahCommand;
     private Command sebelumCommand;
     private Command dataBTSCommand;
+    private Command exitCommand;
     private Command pilihPosisiCommand;
     private Command cariPosisiCommand;
     private SimpleCancellableTask loadingDataTask;
@@ -274,7 +276,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
         } else if (displayable == frmNetworkInfo) {
             if (command == backCommand) {//GEN-END:|7-commandAction|21|171-preAction
                 // write pre-action user code here
-                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|22|171-postAction
+                switchDisplayable(null, getMainMap());//GEN-LINE:|7-commandAction|22|171-postAction
                 // write post-action user code here
             } else if (command == pilihPosisiCommand) {//GEN-LINE:|7-commandAction|23|217-preAction
                 // write pre-action user code here
@@ -385,23 +387,27 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
                 this.getTmBTS().fireTableModelChanged();
                 switchDisplayable(null, getFrmDataBTS());//GEN-LINE:|7-commandAction|52|200-postAction
                 // write post-action user code here
-            } else if (command == findAreaCommand) {//GEN-LINE:|7-commandAction|53|45-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|53|221-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|54|45-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|54|221-postAction
+                // write post-action user code here
+            } else if (command == findAreaCommand) {//GEN-LINE:|7-commandAction|55|45-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getFrmCariArea());//GEN-LINE:|7-commandAction|56|45-postAction
                 // write post-action user code here
                 this.state = UntuneBoyo.ALL;
-            } else if (command == updateCommand) {//GEN-LINE:|7-commandAction|55|182-preAction
+            } else if (command == updateCommand) {//GEN-LINE:|7-commandAction|57|182-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getUpdateScreen());//GEN-LINE:|7-commandAction|56|182-postAction
+                switchDisplayable(null, getUpdateScreen());//GEN-LINE:|7-commandAction|58|182-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|57|141-preAction
+            }//GEN-BEGIN:|7-commandAction|59|141-preAction
         } else if (displayable == networkInfoScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|57|141-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|59|141-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getFrmCariRute());//GEN-LINE:|7-commandAction|58|141-postAction
+                switchDisplayable(null, getFrmCariRute());//GEN-LINE:|7-commandAction|60|141-postAction
                 // write post-action user code here
                 this.state = UntuneBoyo.ALL;
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|59|140-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|61|140-preAction
                 // write pre-action user code here
                 this.getSiMCC().setText(this.MCC);
                 this.getSiMNC().setText(this.MNC);
@@ -425,35 +431,41 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
                 {
                     this.getSiStopPoint().setText("BTS yang ada belum diketahui posisinya.");
                 }
-                switchDisplayable(null, getFrmNetworkInfo());//GEN-LINE:|7-commandAction|60|140-postAction
+                switchDisplayable(null, getFrmNetworkInfo());//GEN-LINE:|7-commandAction|62|140-postAction
                 // write post-action user code here                
-            }//GEN-BEGIN:|7-commandAction|61|185-preAction
+            }//GEN-BEGIN:|7-commandAction|63|224-preAction
+        } else if (displayable == tbDetailTiapRute) {
+            if (command == backCommand) {//GEN-END:|7-commandAction|63|224-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getListDetailRute());//GEN-LINE:|7-commandAction|64|224-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|65|185-preAction
         } else if (displayable == updateScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|61|185-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|65|185-preAction
                 // write pre-action user code here
                 this.getAlertUpdate().setString("Gagal update");
-                switchDisplayable(getAlertUpdate(), getMainMap());//GEN-LINE:|7-commandAction|62|185-postAction
+                switchDisplayable(getAlertUpdate(), getMainMap());//GEN-LINE:|7-commandAction|66|185-postAction
                 // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|63|184-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|67|184-preAction
                 // write pre-action user code here
                 this.getAlertUpdate().setString("Sukses");
-                switchDisplayable(getAlertUpdate(), getMainMap());//GEN-LINE:|7-commandAction|64|184-postAction
+                switchDisplayable(getAlertUpdate(), getMainMap());//GEN-LINE:|7-commandAction|68|184-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|65|165-preAction
+            }//GEN-BEGIN:|7-commandAction|69|165-preAction
         } else if (displayable == uploadScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|65|165-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|69|165-preAction
                 // write pre-action user code here
-                switchDisplayable(getAlertGagalUpload(), getFrmNetworkInfo());//GEN-LINE:|7-commandAction|66|165-postAction
+                switchDisplayable(getAlertGagalUpload(), getFrmNetworkInfo());//GEN-LINE:|7-commandAction|70|165-postAction
                 // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|67|164-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|71|164-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getFrmNetworkInfo());//GEN-LINE:|7-commandAction|68|164-postAction
+                switchDisplayable(null, getFrmNetworkInfo());//GEN-LINE:|7-commandAction|72|164-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|69|7-postCommandAction
-        }//GEN-END:|7-commandAction|69|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|73|7-postCommandAction
+        }//GEN-END:|7-commandAction|73|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|70|
-    //</editor-fold>//GEN-END:|7-commandAction|70|
+    }//GEN-BEGIN:|7-commandAction|74|
+    //</editor-fold>//GEN-END:|7-commandAction|74|
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: mainMap ">//GEN-BEGIN:|32-getter|0|32-preInit
     /**
@@ -469,6 +481,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
             mainMap.addCommand(getCariPosisiCommand());
             mainMap.addCommand(getUpdateCommand());
             mainMap.addCommand(getDataBTSCommand());
+            mainMap.addCommand(getExitCommand());
             mainMap.setCommandListener(this);
             mainMap.setFullScreenMode(true);//GEN-END:|32-getter|1|32-postInit
             // write post-init user code here
@@ -556,7 +569,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
         else if(this.state == UntuneBoyo.NEW)
         {
             this.area = this.getNamaStopPoint(__selectedString);
-            this.switchDisplayable(this.getAlertConfirmUpload(), this.getUpdateScreen());
+            this.switchDisplayable(this.getAlertConfirmUpload(), this.getUploadScreen());
             this.state = UntuneBoyo.ALL;
         }
     }//GEN-BEGIN:|50-action|2|
@@ -624,6 +637,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
             listHasilCariRute = new List("Hasil Pencarian Rute", Choice.IMPLICIT);//GEN-BEGIN:|68-getter|1|68-postInit
             listHasilCariRute.addCommand(getBackToMapCommand());
             listHasilCariRute.setCommandListener(this);
+            listHasilCariRute.setFitPolicy(Choice.TEXT_WRAP_ON);
             listHasilCariRute.setSelectedFlags(new boolean[] {  });//GEN-END:|68-getter|1|68-postInit
             // write post-init user code here
         }//GEN-BEGIN:|68-getter|2|
@@ -847,7 +861,8 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
             listDetailRute = new List("Jalur Dari xxx ke yyy", Choice.IMPLICIT);//GEN-BEGIN:|108-getter|1|108-postInit
             listDetailRute.addCommand(getShowInMapCommand());
             listDetailRute.addCommand(getBackToMapCommand());
-            listDetailRute.setCommandListener(this);//GEN-END:|108-getter|1|108-postInit
+            listDetailRute.setCommandListener(this);
+            listDetailRute.setFitPolicy(Choice.TEXT_WRAP_ON);//GEN-END:|108-getter|1|108-postInit
             // write post-init user code here
         }//GEN-BEGIN:|108-getter|2|
         return listDetailRute;
@@ -862,6 +877,8 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
         // enter pre-action user code here
         String __selectedString = getListDetailRute().getString(getListDetailRute().getSelectedIndex());//GEN-LINE:|108-action|1|108-postAction
         // enter post-action user code here
+        this.getTbDetailTiapRute().setString(__selectedString);
+        this.switchDisplayable(null, this.getTbDetailTiapRute());
     }//GEN-BEGIN:|108-action|2|
     //</editor-fold>//GEN-END:|108-action|2|
 
@@ -1440,7 +1457,7 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
     public SimpleTableModel getTmBTS() {
         if (tmBTS == null) {//GEN-END:|198-getter|0|198-preInit
             // write pre-init user code here
-            tmBTS = new SimpleTableModel(new java.lang.String[][] {}, new java.lang.String[] { "Cell ID", "Posisi" });//GEN-LINE:|198-getter|1|198-postInit
+            tmBTS = new SimpleTableModel(new java.lang.String[][] {}, new java.lang.String[] { "MCC", "MNC", "LAC", "Cell ID", "Posisi" });//GEN-LINE:|198-getter|1|198-postInit
             // write post-init user code here
         }//GEN-BEGIN:|198-getter|2|
         return tmBTS;
@@ -1521,6 +1538,38 @@ public class UntuneBoyo extends MIDlet implements CommandListener {
         return pilihPosisiCommand;
     }
     //</editor-fold>//GEN-END:|216-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|220-getter|0|220-preInit
+    /**
+     * Returns an initiliazed instance of exitCommand component.
+     * @return the initialized component instance
+     */
+    public Command getExitCommand() {
+        if (exitCommand == null) {//GEN-END:|220-getter|0|220-preInit
+            // write pre-init user code here
+            exitCommand = new Command("Keluar", Command.EXIT, 0);//GEN-LINE:|220-getter|1|220-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|220-getter|2|
+        return exitCommand;
+    }
+    //</editor-fold>//GEN-END:|220-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: tbDetailTiapRute ">//GEN-BEGIN:|223-getter|0|223-preInit
+    /**
+     * Returns an initiliazed instance of tbDetailTiapRute component.
+     * @return the initialized component instance
+     */
+    public TextBox getTbDetailTiapRute() {
+        if (tbDetailTiapRute == null) {//GEN-END:|223-getter|0|223-preInit
+            // write pre-init user code here
+            tbDetailTiapRute = new TextBox("textBox", null, 300, TextField.ANY);//GEN-BEGIN:|223-getter|1|223-postInit
+            tbDetailTiapRute.addCommand(getBackCommand());
+            tbDetailTiapRute.setCommandListener(this);//GEN-END:|223-getter|1|223-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|223-getter|2|
+        return tbDetailTiapRute;
+    }
+    //</editor-fold>//GEN-END:|223-getter|2|
 
     private String getNamaStopPoint(String key)
     {

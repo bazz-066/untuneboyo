@@ -33,7 +33,7 @@ public class DataManager
             
             if(start >= cellLocs.size())
             {
-                return new String[][]{ {" ", " "} };
+                return new String[][]{ {" ", " ", " ", " ", " "} };
             }
             else
             {
@@ -43,12 +43,12 @@ public class DataManager
                 if(start + length >= cellLocs.size())
                 {
                     batas = cellLocs.size();
-                    result = new String[batas-start][2];
+                    result = new String[batas-start][5];
                 }
                 else
                 {
                     batas = start + length;
-                    result = new String[length][2];
+                    result = new String[length][5];
                 }
                 
                 int index = 0, counter = 0;
@@ -62,11 +62,14 @@ public class DataManager
                     {
                         if(counter >= start && counter < start + length)
                         {
-                            result[index][0] = cell.CellID;
+                            result[index][0] = cell.MCC;
+                            result[index][1] = cell.MNC;
+                            result[index][2] = cell.LAC;
+                            result[index][3] = cell.CellID;
 
                             CellLocation loc = (CellLocation) locations.get(j);
 
-                            result[index][1] = loc.stopPoint;
+                            result[index][4] = loc.stopPoint;
                             index++;
                         }
                         
@@ -77,9 +80,9 @@ public class DataManager
                 return result;
             }
         } catch (FloggyException ex) {
-            return new String[][]{ {" ", " "} };
+            return new String[][]{ {" ", " ", " ", " ", " "} };
         } catch (ClassNotFoundException ex) {
-            return new String[][]{ {" ", " "} };
+            return new String[][]{ {" ", " ", " ", " ", " "} };
         }
     }
     
@@ -189,8 +192,8 @@ public class DataManager
         } 
         catch (FloggyException ex) 
         {
-            lastUpdateBTS = "Jan 1 1900 00:00AM";
-            lastUpdateLoc = "Jan 1 1900 00:00AM";
+            lastUpdateBTS = "01 Jan 1900 00:00:01:001";
+            lastUpdateLoc = "01 Jan 1900 00:00:01:001";
         }
         
         String[] lastUpdate = new String[2];
