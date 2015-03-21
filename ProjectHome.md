@@ -1,0 +1,1 @@
+An application which give information about Surabaya's public transportation route to user. It can provide shortest route too.
